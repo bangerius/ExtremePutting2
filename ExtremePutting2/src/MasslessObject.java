@@ -1,8 +1,9 @@
 import java.awt.Image;
 
 
-public class FixedPoint extends Renderable implements SpringMate{
-	public FixedPoint(Image image, double x, double y){
+public class MasslessObject extends Renderable implements SpringMate{
+	Shape shape;
+	public MasslessObject(Image image, double x, double y){
 		super(image, x, y);
 	}
 

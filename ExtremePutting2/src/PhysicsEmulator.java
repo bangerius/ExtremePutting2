@@ -36,7 +36,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private BufferedImage FixedPointImage;
 
 	//allting på skärmen
-	FixedPoint fp;
+	MasslessObject fp;
 	MassObject mass1;
 	MassObject mass2;
 	Spring s1;
@@ -67,7 +67,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		}
 
 		// Skapa allt på skärmen
-		fp = new FixedPoint(FixedPointImage, WINDOW_WIDTH/2, 50);
+		fp = new MasslessObject(FixedPointImage, WINDOW_WIDTH/2, 50);
 		mass1 = new MassObject(MassObjectImage, 35, 450, 50);
 		mass2 = new MassObject(MassObjectImage, 20, 250, 150);
 

@@ -4,6 +4,7 @@ import java.util.Set;
 
 public class MassObject extends Renderable implements SpringMate {
 	double mass;
+	Shape shape;
 	MyVector speed;
 	Set<ForceSource> affectingForces;
 	Set<AccelerationSource> affectingAccs;
