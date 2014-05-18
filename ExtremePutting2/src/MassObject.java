@@ -27,7 +27,6 @@ public class MassObject extends Renderable implements SpringMate {
 	
 	public void update(long delta){
 		MyVector netForce= new MyVector(0,0);
-		double dx=0,dy=0;
 		
 		for (ForceSource s : affectingForces) {
 			netForce.add(s.getForceVector(this));
@@ -39,13 +38,10 @@ public class MassObject extends Renderable implements SpringMate {
 			netAcc.add(a.getAccVector());
 		}
 		
-		
-		dx = speed.x * (delta/1000.0) + netAcc.x * (delta/1000.0) * (delta/1000.0) /2;
-		dy = speed.y * (delta/1000.0) + netAcc.y * (delta/1000.0) * (delta/1000.0) /2;
 		speed.x += netAcc.x * (delta/1000.0);
 		speed.y += netAcc.y * (delta/1000.0);
-		xpos += dx;
-		ypos += dy;
+		xpos += speed.x * (delta/1000.0);
+		ypos += speed.y * (delta/1000.0);
 	}
 
 	@Override
