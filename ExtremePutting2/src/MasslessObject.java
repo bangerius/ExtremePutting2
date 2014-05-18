@@ -33,4 +33,9 @@ public class MasslessObject extends Renderable implements SpringMate, ColisionMa
 	public void setSpeed(MyVector v) {
 		//Can't move massless objects.
 	}
+
+	@Override
+	public double getMass() {
+		return 0;
+	}
 }
