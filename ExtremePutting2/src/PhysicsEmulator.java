@@ -39,9 +39,12 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	MasslessObject fp;
 	MassObject mass1;
 	MassObject mass2;
+	MassObject mass3;
+	MassObject mass4;
 	Spring s1;
 	Spring s2;
 	AccelerationSource gravity;
+	AccelerationSource neggravity;
 
 	/**
 	 * Create a GameCanvas
@@ -70,6 +73,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		fp = new MasslessObject(FixedPointImage, WINDOW_WIDTH/2, 50, new Rectangle(FixedPointImage.getHeight(), FixedPointImage.getWidth()));
 		mass1 = new MassObject(MassObjectImage, 35, 450, 50,new Circle(MassObjectImage.getHeight()));
 		mass2 = new MassObject(MassObjectImage, 20, 250, 150, new Circle(MassObjectImage.getHeight()));
+		
+		mass3 = new MassObject(MassObjectImage, 35, 234, 50,new Circle(MassObjectImage.getHeight()/2));
+		mass4 = new MassObject(MassObjectImage, 20, 250, 350,new Circle(MassObjectImage.getHeight()/2));
 
 		s1 = new Spring(60, 200, mass1, mass2, SpringImage);
 		s2 = new Spring(60, 200, fp, mass1, SpringImage);
@@ -80,8 +86,17 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			}
 			
 		};
+		neggravity = new AccelerationSource(){
+			@Override
+			public MyVector getAccVector() {
+				return (new MyVector(0, -98.2));
+			}
+			
+		};
 		mass1.addAffectingAcceleration(gravity);
 		mass2.addAffectingAcceleration(gravity);
+		mass3.addAffectingAcceleration(gravity);
+		mass4.addAffectingAcceleration(neggravity);
 	}
 
 	/**
@@ -149,6 +164,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		g.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 		mass1.render(g);
 		mass2.render(g);
+		mass3.render(g);
+		mass4.render(g);
 		s1.render(g);
 		s2.render(g);
 		fp.render(g);
@@ -164,6 +181,15 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private void update(long delta) {
 		mass1.update(delta);
 		mass2.update(delta);
+		if(ColisionHandler.doesColide(mass3, mass4)){
+			ColisionHandler.Colide(mass3, mass4);
+			mass3.xpos += mass3.speed.x * (delta/100.0);
+			mass3.ypos += mass3.speed.y * (delta/100.0);
+			mass4.xpos += mass4.speed.x * (delta/100.0);
+			mass4.ypos += mass4.speed.y * (delta/100.0);
+		}
+		mass3.update(delta);
+		mass4.update(delta);
 		s1.update();
 		s2.update();
 	}

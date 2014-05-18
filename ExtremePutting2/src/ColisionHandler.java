@@ -1,12 +1,12 @@
 public class ColisionHandler {
 	public static boolean doesColide(ColisionMate a, ColisionMate b) {
-		if (a.getClass() == Circle.class && b.getClass() == Circle.class) {
+		if (a.getShape().getClass() == Circle.class && b.getShape().getClass() == Circle.class) {
 			Circle aCircle = (Circle) a.getShape();
 			Circle bCircle = (Circle) b.getShape();
 			double dx = a.getPosition().x - b.getPosition().x;
 			double dy = a.getPosition().y - b.getPosition().y;
-			return (Math.sqrt(dx * dx + dy * dy) <= aCircle.radius
-					+ bCircle.radius);
+			return (Math.sqrt(dx * dx + dy * dy) <= (aCircle.radius
+					+ bCircle.radius));
 		} else {
 			return false; // For now.
 		}
@@ -25,7 +25,7 @@ public class ColisionHandler {
 		MyVector aColisionComposandSpeed = cmFromAToB.clone();
 		aColisionComposandSpeed.devide(cmFromAToB.magnitude());
 		aColisionComposandSpeed.multiply(MyVector.scalarProduct(a.getSpeed(),
-				cmFromAToB) * (-1));
+				cmFromAToB));
 
 		// b:s vektor i kolisionsriktningen
 		MyVector bColisionComposandSpeed = cmFromAToB.clone();
