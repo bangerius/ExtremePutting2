@@ -41,7 +41,7 @@ public class Spring extends Renderable implements ForceSource{
 			return inflictingForce;
 			
 		} catch (Exception e) {
-			System.out.println("Object is not a spring");
+			System.out.println("Object is not a springmate");
 			return null;
 		}
 	}
