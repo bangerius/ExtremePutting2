@@ -74,7 +74,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		mass1 = new MassObject(MassObjectImage, 35, 450, 50,new Circle(MassObjectImage.getHeight()));
 		mass2 = new MassObject(MassObjectImage, 20, 250, 150, new Circle(MassObjectImage.getHeight()));
 		
-		mass3 = new MassObject(MassObjectImage, 35, 234, 50,new Circle(MassObjectImage.getHeight()/2));
+		mass3 = new MassObject(MassObjectImage, 20, 247, 50,new Circle(MassObjectImage.getHeight()/2));
 		mass4 = new MassObject(MassObjectImage, 20, 250, 350,new Circle(MassObjectImage.getHeight()/2));
 
 		s1 = new Spring(60, 200, mass1, mass2, SpringImage);
@@ -183,10 +183,6 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		mass2.update(delta);
 		if(ColisionHandler.doesColide(mass3, mass4)){
 			ColisionHandler.Colide(mass3, mass4);
-			mass3.xpos += mass3.speed.x * (delta/100.0);
-			mass3.ypos += mass3.speed.y * (delta/100.0);
-			mass4.xpos += mass4.speed.x * (delta/100.0);
-			mass4.ypos += mass4.speed.y * (delta/100.0);
 		}
 		mass3.update(delta);
 		mass4.update(delta);
