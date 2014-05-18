@@ -13,4 +13,9 @@ public class Circle implements Shape{
 		radius=_radius;
 		color = new Color(0, 0, 0);
 	}
+	@Override
+	public boolean isInside(MyVector pointToCheck, MyVector centerOfShape) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

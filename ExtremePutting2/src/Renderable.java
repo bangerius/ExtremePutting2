@@ -6,7 +6,6 @@ import java.awt.Image;
  * @author Mikael Silvén
  */
 public class Renderable {
-
 	Image image;
 	protected double ypos;
 	protected double xpos;

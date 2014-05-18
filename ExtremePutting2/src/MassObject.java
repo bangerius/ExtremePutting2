@@ -4,17 +4,19 @@ import java.util.Set;
 
 public class MassObject extends Renderable implements SpringMate {
 	double mass;
-	Shape shape;
+	Shape shape; //This is for handling colisions. I don't know if there will be support for other than round and square.
 	MyVector speed;
 	Set<ForceSource> affectingForces;
 	Set<AccelerationSource> affectingAccs;
 	
-	public MassObject(Image image, double _mass, double x, double y) {
+	public MassObject(Image image, double _mass, double x, double y, Shape _shape) {
+		
 		super(image, x, y);
 		mass= _mass;
 		speed = new MyVector(0.0,0.0);
 		affectingForces = new HashSet<ForceSource>();
 		affectingAccs = new HashSet<AccelerationSource>();
+		shape=_shape;
 	}
 	
 	public void addAffectingForce(ForceSource s){
