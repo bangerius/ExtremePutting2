@@ -67,9 +67,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		}
 
 		// Skapa allt på skärmen
-		fp = new MasslessObject(FixedPointImage, WINDOW_WIDTH/2, 50);
-		mass1 = new MassObject(MassObjectImage, 35, 450, 50);
-		mass2 = new MassObject(MassObjectImage, 20, 250, 150);
+		fp = new MasslessObject(FixedPointImage, WINDOW_WIDTH/2, 50, new Rectangle(FixedPointImage.getHeight(), FixedPointImage.getWidth()));
+		mass1 = new MassObject(MassObjectImage, 35, 450, 50,new Circle(MassObjectImage.getHeight()));
+		mass2 = new MassObject(MassObjectImage, 20, 250, 150, new Circle(MassObjectImage.getHeight()));
 
 		s1 = new Spring(60, 200, mass1, mass2, SpringImage);
 		s2 = new Spring(60, 200, fp, mass1, SpringImage);

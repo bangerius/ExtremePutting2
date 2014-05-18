@@ -2,7 +2,7 @@ import java.awt.Image;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MassObject extends Renderable implements SpringMate {
+public class MassObject extends Renderable implements SpringMate, ColisionMate{
 	double mass;
 	Shape shape; //This is for handling colisions. I don't know if there will be support for other than round and square.
 	MyVector speed;

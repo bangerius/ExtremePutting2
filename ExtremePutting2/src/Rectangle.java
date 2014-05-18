@@ -17,7 +17,6 @@ public class Rectangle implements Shape{
 	}
 	@Override
 	public boolean isInside(MyVector pointToCheck, MyVector centerOfShape) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }
