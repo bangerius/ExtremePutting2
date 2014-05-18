@@ -7,8 +7,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -37,14 +39,10 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 	//allting på skärmen
 	MasslessObject fp;
-	MassObject mass1;
-	MassObject mass2;
-	MassObject mass3;
-	MassObject mass4;
-	Spring s1;
-	Spring s2;
+	ArrayList<MassObject> masses;
+	ArrayList<Spring> springs;
 	AccelerationSource gravity;
-	AccelerationSource neggravity;
+	AccelerationSource antigravity;
 
 	/**
 	 * Create a GameCanvas
@@ -70,15 +68,17 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		}
 
 		// Skapa allt på skärmen
+		masses = new ArrayList<MassObject>();
+		springs = new ArrayList<Spring>();
 		fp = new MasslessObject(FixedPointImage, WINDOW_WIDTH/2, 50, new Rectangle(FixedPointImage.getHeight(), FixedPointImage.getWidth()));
-		mass1 = new MassObject(MassObjectImage, 35, 450, 50,new Circle(MassObjectImage.getHeight()));
-		mass2 = new MassObject(MassObjectImage, 20, 250, 150, new Circle(MassObjectImage.getHeight()));
+		masses.add(new MassObject(MassObjectImage, 20, 450, 50,new Circle(MassObjectImage.getHeight()/2)));
+		masses.add(new MassObject(MassObjectImage, 35, 300, 100,new Circle(MassObjectImage.getHeight()/2)));
 		
-		mass3 = new MassObject(MassObjectImage, 20, 247, 50,new Circle(MassObjectImage.getHeight()/2));
-		mass4 = new MassObject(MassObjectImage, 20, 250, 350,new Circle(MassObjectImage.getHeight()/2));
+		masses.add(new MassObject(MassObjectImage, 20, 250, 90,new Circle(MassObjectImage.getHeight()/2)));
+		masses.add(new MassObject(MassObjectImage, 20, 248, 120,new Circle(MassObjectImage.getHeight()/2)));
 
-		s1 = new Spring(60, 200, mass1, mass2, SpringImage);
-		s2 = new Spring(60, 200, fp, mass1, SpringImage);
+		springs.add(new Spring(60, 200, masses.get(0), fp, SpringImage));
+		springs.add(new Spring(60, 200, masses.get(0), masses.get(1), SpringImage));
 		gravity = new AccelerationSource(){
 			@Override
 			public MyVector getAccVector() {
@@ -86,17 +86,17 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			}
 			
 		};
-		neggravity = new AccelerationSource(){
+		antigravity = new AccelerationSource(){
 			@Override
 			public MyVector getAccVector() {
 				return (new MyVector(0, -98.2));
 			}
 			
 		};
-		mass1.addAffectingAcceleration(gravity);
-		mass2.addAffectingAcceleration(gravity);
-		mass3.addAffectingAcceleration(gravity);
-		mass4.addAffectingAcceleration(neggravity);
+		for (int i = 0; i<3;i++) {
+			masses.get(i).addAffectingAcceleration(gravity);
+		}
+		masses.get(3).addAffectingAcceleration(antigravity);
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			// Låt tråden sova i 10 millisekunder, 
 			// prova att ändra denna siffran.
 			try {
-				Thread.sleep(4);
+				Thread.sleep(5);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -162,12 +162,12 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		// Måla bakgrund, zombies och kulor 
 		//g.drawImage(backgroundImage, 0, 0, null);
 		g.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-		mass1.render(g);
-		mass2.render(g);
-		mass3.render(g);
-		mass4.render(g);
-		s1.render(g);
-		s2.render(g);
+		for (int i = 0; i<masses.size();i++) {
+			masses.get(i).render(g);
+		}
+		for (int i = 0; i<springs.size();i++) {
+			springs.get(i).render(g);
+		}
 		fp.render(g);
 		
 		// Gör så att allt vi målat ut synns
@@ -179,14 +179,20 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	 * @param delta the delta in milliseconds since last iteration
 	 */
 	private void update(long delta) {
-		mass1.update(delta);
-		mass2.update(delta);
-		if(ColisionHandler.doesColide(mass3, mass4)){
-			ColisionHandler.Colide(mass3, mass4);
+		for (int i = 0; i<masses.size();i++) {
+			masses.get(i).update(delta);
 		}
-		mass3.update(delta);
-		mass4.update(delta);
-		s1.update();
-		s2.update();
+		for (int i = 0; i<masses.size();i++) {
+			for (int j = i; j<masses.size();j++) {
+				if(i!=j){
+					if(ColisionHandler.doesColide(masses.get(i), masses.get(j))){
+						ColisionHandler.Colide(masses.get(i), masses.get(j));
+					}
+				}
+			}
+		}
+		for (Spring spring : springs) {
+			spring.update();
+		}
 	}
 }
