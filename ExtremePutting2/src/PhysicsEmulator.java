@@ -17,27 +17,28 @@ import javax.swing.JFrame;
 
 /**
  * PhysicsEmulator class encapsulates an Emulator
+ * 
  * @author Sebastian B�ngerius
  */
 public class PhysicsEmulator extends Canvas implements Runnable {
 
-	/* Konstanter som säger hur stort fönstret är, 
-	 * hur många zombie som börjar på fältet,
-	 * hur långt en kula max får färdas,
-	 * och hur snabbt zombie spawnar samt
-	 * hur snabbt man får skjuta */
-	
+	/*
+	 * Konstanter som säger hur stort fönstret är, hur många zombie som
+	 * börjar på fältet, hur långt en kula max får färdas, och hur snabbt
+	 * zombie spawnar samt hur snabbt man får skjuta
+	 */
+
 	private static final int WINDOW_WIDTH = 1400;
 	private static final int WINDOW_HEIGHT = 900;
-	
+
 	private boolean running;
-	
+
 	// Våra bilder
 	private BufferedImage MassObjectImage;
 	private BufferedImage SpringImage;
 	private BufferedImage FixedPointImage;
 
-	//allting på skärmen
+	// allting på skärmen
 	MasslessObject fp;
 	ArrayList<MassObject> masses;
 	ArrayList<Spring> springs;
@@ -52,9 +53,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		setMinimumSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		setPreferredSize(getMinimumSize());
 		setMaximumSize(getMinimumSize());
-		
+
 		// Försök ladda in filer, krasha om något går snett
-		try {			
+		try {
 			MassObjectImage = ImageIO.read(getClass().getResource(
 					"/assets/bullet.png"));
 			SpringImage = ImageIO.read(getClass().getResource(
@@ -70,30 +71,37 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		// Skapa allt på skärmen
 		masses = new ArrayList<MassObject>();
 		springs = new ArrayList<Spring>();
-		fp = new MasslessObject(FixedPointImage, WINDOW_WIDTH/2, 50, new Rectangle(FixedPointImage.getHeight(), FixedPointImage.getWidth()));
-		masses.add(new MassObject(MassObjectImage, 20, 450, 50,new Circle(MassObjectImage.getHeight()/2)));
-		masses.add(new MassObject(MassObjectImage, 35, 300, 100,new Circle(MassObjectImage.getHeight()/2)));
-		
-		masses.add(new MassObject(MassObjectImage, 20, 250, 90,new Circle(MassObjectImage.getHeight()/2)));
-		masses.add(new MassObject(MassObjectImage, 20, 248, 120,new Circle(MassObjectImage.getHeight()/2)));
+		fp = new MasslessObject(FixedPointImage, WINDOW_WIDTH / 2, 50,
+				new Rectangle(FixedPointImage.getHeight(),
+						FixedPointImage.getWidth()));
+		masses.add(new MassObject(MassObjectImage, 20, 450, 50, new Circle(
+				MassObjectImage.getHeight() / 2)));
+		masses.add(new MassObject(MassObjectImage, 35, 300, 100, new Circle(
+				MassObjectImage.getHeight() / 2)));
+
+		masses.add(new MassObject(MassObjectImage, 20, 250, 90, new Circle(
+				MassObjectImage.getHeight() / 2)));
+		masses.add(new MassObject(MassObjectImage, 20, 248, 120, new Circle(
+				MassObjectImage.getHeight() / 2)));
 
 		springs.add(new Spring(60, 255, masses.get(0), fp, SpringImage));
-		springs.add(new Spring(60, 250, masses.get(0), masses.get(1), SpringImage));
-		gravity = new AccelerationSource(){
+		springs.add(new Spring(60, 250, masses.get(0), masses.get(1),
+				SpringImage));
+		gravity = new AccelerationSource() {
 			@Override
 			public MyVector getAccVector() {
 				return (new MyVector(0, 98.2));
 			}
-			
+
 		};
-		antigravity = new AccelerationSource(){
+		antigravity = new AccelerationSource() {
 			@Override
 			public MyVector getAccVector() {
 				return (new MyVector(0, -98.2));
 			}
-			
+
 		};
-		for (int i = 0; i<masses.size();i++) {
+		for (int i = 0; i < masses.size(); i++) {
 			masses.get(i).addAffectingAcceleration(gravity);
 		}
 	}
@@ -113,6 +121,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 	/**
 	 * Main function, sets up a JFrame and starts a game
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -127,8 +136,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	}
 
 	/**
-	 * Method for @see {@link Runnable} implementation
-	 * Main Game loop. Runs more or less forever
+	 * Method for @see {@link Runnable} implementation Main Game loop. Runs more
+	 * or less forever
 	 */
 	@Override
 	public void run() {
@@ -139,7 +148,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			update(delta);
 			render();
 
-			// Låt tråden sova i 10 millisekunder, 
+			// Låt tråden sova i 10 millisekunder,
 			// prova att ändra denna siffran.
 			try {
 				Thread.sleep(5);
@@ -158,35 +167,35 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		BufferStrategy strategy = getBufferStrategy();
 		Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
 
-		// Måla bakgrund, zombies och kulor 
-		//g.drawImage(backgroundImage, 0, 0, null);
+		// Måla bakgrund, zombies och kulor
+		// g.drawImage(backgroundImage, 0, 0, null);
 		g.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-		for (int i = 0; i<masses.size();i++) {
+		for (int i = 0; i < masses.size(); i++) {
 			masses.get(i).render(g);
 		}
-		for (int i = 0; i<springs.size();i++) {
+		for (int i = 0; i < springs.size(); i++) {
 			springs.get(i).render(g);
 		}
 		fp.render(g);
-		
+
 		// Gör så att allt vi målat ut synns
 		strategy.show();
 	}
 
 	/**
 	 * Update method updates the game logic
-	 * @param delta the delta in milliseconds since last iteration
+	 * 
+	 * @param delta
+	 *            the delta in milliseconds since last iteration
 	 */
 	private void update(long delta) {
-		for (int i = 0; i<masses.size();i++) {
+		for (int i = 0; i < masses.size(); i++) {
 			masses.get(i).update(delta);
 		}
-		for (int i = 0; i<masses.size();i++) {
-			for (int j = i; j<masses.size();j++) {
-				if(i!=j){
-					if(ColisionHandler.doesColide(masses.get(i), masses.get(j))){
-						ColisionHandler.Colide(masses.get(i), masses.get(j));
-					}
+		for (int i = 0; i < masses.size(); i++) {
+			for (int j = i + 1; j < masses.size(); j++) {
+				if (ColisionHandler.doesColide(masses.get(i), masses.get(j))) {
+					ColisionHandler.Colide(masses.get(i), masses.get(j));
 				}
 			}
 		}
