@@ -7,34 +7,28 @@ public class MasslessObject extends Renderable implements SpringMate, ColisionMa
 		super(image, x, y);
 	}
 
-	@Override
 	public void addAffectingForce(ForceSource s) {
 		
 	}
 
-	@Override
 	public MyVector getSpeed() {
 		// TODO Auto-generated method stub
 		return (new MyVector(0,0));
 	}
 
-	@Override
 	public MyVector getPosition() {
 		// TODO Auto-generated method stub
 		return (new MyVector(xpos,ypos));
 	}
 
-	@Override
 	public Shape getShape() {
 		return shape;
 	}
 
-	@Override
 	public void setSpeed(MyVector v) {
 		//Can't move massless objects.
 	}
 
-	@Override
 	public double getMass() {
 		return 0;
 	}

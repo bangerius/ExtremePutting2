@@ -15,7 +15,6 @@ public class Rectangle implements Shape{
 		width=_width;
 		color = new Color(0, 0, 0);
 	}
-	@Override
 	public boolean isInside(MyVector pointToCheck, MyVector centerOfShape) {
 		return false;
 	}

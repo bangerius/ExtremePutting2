@@ -88,14 +88,12 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		springs.add(new Spring(60, 250, masses.get(0), masses.get(1),
 				SpringImage));
 		gravity = new AccelerationSource() {
-			@Override
 			public MyVector getAccVector() {
 				return (new MyVector(0, 98.2));
 			}
 
 		};
 		antigravity = new AccelerationSource() {
-			@Override
 			public MyVector getAccVector() {
 				return (new MyVector(0, -98.2));
 			}
@@ -139,7 +137,6 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	 * Method for @see {@link Runnable} implementation Main Game loop. Runs more
 	 * or less forever
 	 */
-	@Override
 	public void run() {
 		long last = System.currentTimeMillis();
 		while (running) {

@@ -46,27 +46,22 @@ public class MassObject extends Renderable implements SpringMate, ColisionMate{
 		ypos += speed.y * (delta/1000.0);
 	}
 
-	@Override
 	public MyVector getSpeed() {
 		return speed;
 	}
 
-	@Override
 	public MyVector getPosition() {
 		return (new MyVector(xpos,ypos));
 	}
 
-	@Override
 	public Shape getShape() {
 		return shape;
 	}
 
-	@Override
 	public void setSpeed(MyVector v) {
 		speed=v;
 	}
 
-	@Override
 	public double getMass() {
 		return mass;
 	}

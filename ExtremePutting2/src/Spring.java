@@ -23,7 +23,6 @@ public class Spring extends Renderable implements ForceSource{
 		mate2.addAffectingForce(this);
 	}
 
-	@Override
 	public MyVector getForceVector(Object o) {
 		try {
 			SpringMate m = (SpringMate)o;
