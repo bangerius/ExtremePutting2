@@ -27,8 +27,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	 * och hur snabbt zombie spawnar samt
 	 * hur snabbt man får skjuta */
 	
-	private static final int WINDOW_WIDTH = 1100;
-	private static final int WINDOW_HEIGHT = 600;
+	private static final int WINDOW_WIDTH = 1400;
+	private static final int WINDOW_HEIGHT = 900;
 	
 	private boolean running;
 	
@@ -77,8 +77,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		masses.add(new MassObject(MassObjectImage, 20, 250, 90,new Circle(MassObjectImage.getHeight()/2)));
 		masses.add(new MassObject(MassObjectImage, 20, 248, 120,new Circle(MassObjectImage.getHeight()/2)));
 
-		springs.add(new Spring(60, 200, masses.get(0), fp, SpringImage));
-		springs.add(new Spring(60, 200, masses.get(0), masses.get(1), SpringImage));
+		springs.add(new Spring(60, 255, masses.get(0), fp, SpringImage));
+		springs.add(new Spring(60, 250, masses.get(0), masses.get(1), SpringImage));
 		gravity = new AccelerationSource(){
 			@Override
 			public MyVector getAccVector() {
@@ -93,10 +93,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			}
 			
 		};
-		for (int i = 0; i<3;i++) {
+		for (int i = 0; i<masses.size();i++) {
 			masses.get(i).addAffectingAcceleration(gravity);
 		}
-		masses.get(3).addAffectingAcceleration(antigravity);
 	}
 
 	/**
