@@ -44,7 +44,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private BufferedImage BGGreenImage;
 
 	// allting på skärmen
-	MasslessObject fp;
+
 	MasslessObject bg;
 	ArrayList<MassObject> masses;
 	ArrayList<Spring> springs;
@@ -88,11 +88,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		masses = new ArrayList<MassObject>();
 		springs = new ArrayList<Spring>();
 		
-
-		
 		bg = new MasslessObject(BGGreenImage, 750, 500, 
-				new Rectangle(BGGreenImage.getHeight(),
-						BGGreenImage.getWidth()));
+				new Circle(0));
 		
 		masses.add(new MassObject(BallBlueImage, 25, 1100, 500, new Circle(
 				BallBlueImage.getHeight() / 2)));
@@ -190,14 +187,16 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 		// Måla bakgrund, zombies och kulor
 		// g.drawImage(backgroundImage, 0, 0, null);
+
 		g.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+		bg.render(g);
 		for (int i = 0; i < masses.size(); i++) {
 			masses.get(i).render(g);
 		}
 		for (int i = 0; i < springs.size(); i++) {
 			springs.get(i).render(g);
 		}
-		fp.render(g);
+		
 
 		// Gör så att allt vi målat ut synns
 		strategy.show();
