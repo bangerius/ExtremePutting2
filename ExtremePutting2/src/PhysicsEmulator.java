@@ -97,14 +97,16 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		masses.add(new MassObject(BallYellowImage, 25, 1100, 500, new Circle(
 				BallYellowImage.getHeight() / 2)));
 		masses.add(new MassObject(HoleImage, 50000, 1400, 100, new Circle(
-				HoleImage.getHeight() / 2)));
+				HoleImage.getHeight() / 3)));
 		
 		testhit = new AccelerationSource() {
 			public MyVector getAccVector() {
-				return (new MyVector(0, 98.2));
+				return (new MyVector(60, -23.5));
 			}
 
 		};
+		masses.get(0).addAffectingAcceleration(testhit);
+		
 		gravity = new AccelerationSource() {
 			public MyVector getAccVector() {
 				return (new MyVector(0, 98.2));
