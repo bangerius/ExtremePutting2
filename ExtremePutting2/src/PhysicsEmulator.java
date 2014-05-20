@@ -37,7 +37,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private BufferedImage MassObjectImage;
 	private BufferedImage SpringImage;
 	private BufferedImage FixedPointImage;
-	private BufferedImage HeartImage;
+	private BufferedImage HoleImage;
 	private BufferedImage BallBlueImage;
 	private BufferedImage BallGreenImage;
 	private BufferedImage BallYellowImage;
@@ -50,6 +50,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	ArrayList<Spring> springs;
 	AccelerationSource gravity;
 	AccelerationSource antigravity;
+	AccelerationSource testhit;
 
 	/**
 	 * Create a GameCanvas
@@ -62,8 +63,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 		// Försök ladda in filer, krasha om något går snett
 		try {
-			HeartImage = ImageIO.read(getClass().getResource(
-					"/assets/heart.png"));
+			HoleImage = ImageIO.read(getClass().getResource(
+					"/assets/holeupd.png"));
 			MassObjectImage = ImageIO.read(getClass().getResource(
 					"/assets/bullet.png"));
 			SpringImage = ImageIO.read(getClass().getResource(
@@ -91,13 +92,19 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		bg = new MasslessObject(BGGreenImage, 750, 500, 
 				new Circle(0));
 		
-		masses.add(new MassObject(BallBlueImage, 25, 1100, 500, new Circle(
-				BallBlueImage.getHeight() / 2)));
-		masses.add(new MassObject(BallYellowImage, 25, 50, 950, new Circle(
+		masses.add(new MassObject(BallYellowImage, 25, 100, 900, new Circle(
 				BallYellowImage.getHeight() / 2)));
-		masses.add(new MassObject(HeartImage, 50000, 1450, 50, new Circle(
-				HeartImage.getHeight() / 2)));
+		masses.add(new MassObject(BallYellowImage, 25, 1100, 500, new Circle(
+				BallYellowImage.getHeight() / 2)));
+		masses.add(new MassObject(HoleImage, 50000, 1400, 100, new Circle(
+				HoleImage.getHeight() / 2)));
 		
+		testhit = new AccelerationSource() {
+			public MyVector getAccVector() {
+				return (new MyVector(0, 98.2));
+			}
+
+		};
 		gravity = new AccelerationSource() {
 			public MyVector getAccVector() {
 				return (new MyVector(0, 98.2));
