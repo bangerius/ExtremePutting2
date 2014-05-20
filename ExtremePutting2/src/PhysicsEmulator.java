@@ -88,17 +88,16 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		// Skapa allt på skärmen
 		masses = new ArrayList<MassObject>();
 		springs = new ArrayList<Spring>();
-		
-		bg = new MasslessObject(BGGreenImage, 750, 500, 
-				new Circle(0));
-		
+
+		bg = new MasslessObject(BGGreenImage, 750, 500, new Circle(0));
+
 		masses.add(new MassObject(BallYellowImage, 25, 100, 900, new Circle(
 				BallYellowImage.getHeight() / 2)));
 		masses.add(new MassObject(BallYellowImage, 25, 1100, 500, new Circle(
 				BallYellowImage.getHeight() / 2)));
 		masses.add(new MassObject(HoleImage, 50000, 1400, 100, new Circle(
 				HoleImage.getHeight() / 3)));
-		
+
 		testhit = new AccelerationSource() {
 			public MyVector getAccVector() {
 				return (new MyVector(60, -23.5));
@@ -106,7 +105,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 		};
 		masses.get(0).addAffectingAcceleration(testhit);
-		
+
 		gravity = new AccelerationSource() {
 			public MyVector getAccVector() {
 				return (new MyVector(0, 98.2));
@@ -119,19 +118,19 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			}
 
 		};
-		
-//		for (int i = 0; i < masses.size(); i++) {
-//			masses.get(i).addAffectingAcceleration(gravity);
-//		}
-		
-//		masses.add(new MassObject(MassObjectImage, 20, 250, 90, new Circle(
-//				MassObjectImage.getHeight() / 2)));
-//		masses.add(new MassObject(MassObjectImage, 20, 248, 120, new Circle(
-//				MassObjectImage.getHeight() / 2)));
-//		springs.add(new Spring(60, 255, masses.get(0), fp, SpringImage));
-//		springs.add(new Spring(60, 250, masses.get(0), masses.get(1),
-//				SpringImage));
-//	
+
+		// for (int i = 0; i < masses.size(); i++) {
+		// masses.get(i).addAffectingAcceleration(gravity);
+		// }
+
+		// masses.add(new MassObject(MassObjectImage, 20, 250, 90, new Circle(
+		// MassObjectImage.getHeight() / 2)));
+		// masses.add(new MassObject(MassObjectImage, 20, 248, 120, new Circle(
+		// MassObjectImage.getHeight() / 2)));
+		// springs.add(new Spring(60, 255, masses.get(0), fp, SpringImage));
+		// springs.add(new Spring(60, 250, masses.get(0), masses.get(1),
+		// SpringImage));
+		//
 	}
 
 	/**
@@ -205,7 +204,6 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		for (int i = 0; i < springs.size(); i++) {
 			springs.get(i).render(g);
 		}
-		
 
 		// Gör så att allt vi målat ut synns
 		strategy.show();
@@ -223,9 +221,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		}
 		for (int i = 0; i < masses.size(); i++) {
 			for (int j = i + 1; j < masses.size(); j++) {
-				if (ColisionHandler.doesColide(masses.get(i), masses.get(j))) {
-					ColisionHandler.Colide(masses.get(i), masses.get(j));
-				}
+				ColisionHandler.resolveColision(masses.get(i), masses.get(j));
 			}
 		}
 		for (Spring spring : springs) {
