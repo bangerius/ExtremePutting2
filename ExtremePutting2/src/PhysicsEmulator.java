@@ -107,13 +107,13 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		
 		masses.add(new MassObject(HWall, 1000000, 600, 7, new Rectangle(
 				HWall.getWidth(), HWall.getHeight())));
-//		masses.add(new MassObject(HWall, 1000000, 600, 7, new Rectangle(
-//				HWall.getWidth(), HWall.getHeight())));
-//		
-//		masses.add(new MassObject(VWall, 1000000, 600, 7, new Rectangle(
-//				VWall.getWidth(), VWall.getHeight())));
-//		masses.add(new MassObject(VWall, 1000000, 600, 7, new Rectangle(
-//				VWall.getWidth(), VWall.getHeight())));
+		masses.add(new MassObject(HWall, 1000000, 600, 792, new Rectangle(
+				HWall.getWidth(), HWall.getHeight())));
+		
+		masses.add(new MassObject(VWall, 1000000, 7, 400, new Rectangle(
+				VWall.getWidth(), VWall.getHeight())));
+		masses.add(new MassObject(VWall, 1000000, 1192, 400, new Rectangle(
+				VWall.getWidth(), VWall.getHeight())));
 
 		testhit = new AccelerationSource() {
 			public MyVector getAccVector() {
