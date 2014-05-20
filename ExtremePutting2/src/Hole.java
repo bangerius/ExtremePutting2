@@ -13,7 +13,7 @@ public class Hole extends Renderable implements ColisionMate{
 	}
 
 	public Shape getShape() {
-		return null;
+		return shape;
 	}
 
 	public MyVector getSpeed() {
