@@ -28,8 +28,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	 * zombie spawnar samt hur snabbt man får skjuta
 	 */
 
-	private static final int WINDOW_WIDTH = 1400;
-	private static final int WINDOW_HEIGHT = 900;
+	private static final int WINDOW_WIDTH = 1500;
+	private static final int WINDOW_HEIGHT = 1000;
 
 	private boolean running;
 
@@ -37,9 +37,15 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private BufferedImage MassObjectImage;
 	private BufferedImage SpringImage;
 	private BufferedImage FixedPointImage;
+	private BufferedImage HeartImage;
+	private BufferedImage BallBlueImage;
+	private BufferedImage BallGreenImage;
+	private BufferedImage BallYellowImage;
+	private BufferedImage BGGreenImage;
 
 	// allting på skärmen
 	MasslessObject fp;
+	MasslessObject bg;
 	ArrayList<MassObject> masses;
 	ArrayList<Spring> springs;
 	AccelerationSource gravity;
@@ -56,12 +62,22 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 		// Försök ladda in filer, krasha om något går snett
 		try {
+			HeartImage = ImageIO.read(getClass().getResource(
+					"/assets/heart.png"));
 			MassObjectImage = ImageIO.read(getClass().getResource(
 					"/assets/bullet.png"));
 			SpringImage = ImageIO.read(getClass().getResource(
 					"/assets/spring.png"));
 			FixedPointImage = ImageIO.read(getClass().getResource(
 					"/assets/masslesspoint.png"));
+			BallBlueImage = ImageIO.read(getClass().getResource(
+					"/assets/ballb.png"));
+			BallGreenImage = ImageIO.read(getClass().getResource(
+					"/assets/ballg.png"));
+			BallYellowImage = ImageIO.read(getClass().getResource(
+					"/assets/bally.png"));
+			BGGreenImage = ImageIO.read(getClass().getResource(
+					"/assets/bggreen.png"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -72,14 +88,18 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		masses = new ArrayList<MassObject>();
 		springs = new ArrayList<Spring>();
 		
-		fp = new MasslessObject(FixedPointImage, WINDOW_WIDTH / 2000, 2000,
-				new Rectangle(FixedPointImage.getHeight(),
-						FixedPointImage.getWidth()));
+
 		
-		masses.add(new MassObject(MassObjectImage, 25, 1200, 200, new Circle(
-				MassObjectImage.getHeight() / 2)));
-		masses.add(new MassObject(MassObjectImage, 25, 200, 600, new Circle(
-				MassObjectImage.getHeight() / 2)));
+		bg = new MasslessObject(BGGreenImage, 750, 500, 
+				new Rectangle(BGGreenImage.getHeight(),
+						BGGreenImage.getWidth()));
+		
+		masses.add(new MassObject(BallBlueImage, 25, 1100, 500, new Circle(
+				BallBlueImage.getHeight() / 2)));
+		masses.add(new MassObject(BallYellowImage, 25, 50, 950, new Circle(
+				BallYellowImage.getHeight() / 2)));
+		masses.add(new MassObject(HeartImage, 50000, 1450, 50, new Circle(
+				HeartImage.getHeight() / 2)));
 		
 		gravity = new AccelerationSource() {
 			public MyVector getAccVector() {
@@ -97,7 +117,6 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 //		for (int i = 0; i < masses.size(); i++) {
 //			masses.get(i).addAffectingAcceleration(gravity);
 //		}
-
 		
 //		masses.add(new MassObject(MassObjectImage, 20, 250, 90, new Circle(
 //				MassObjectImage.getHeight() / 2)));
