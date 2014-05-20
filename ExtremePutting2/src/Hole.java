@@ -8,28 +8,23 @@ public class Hole extends Renderable implements ColisionMate{
 		shape = new Circle(image.getWidth(null)/5);
 	}
 
-	@Override
 	public MyVector getPosition() {
 		return new MyVector(xpos, ypos);
 	}
 
-	@Override
 	public Shape getShape() {
 		return null;
 	}
 
-	@Override
 	public MyVector getSpeed() {
 		// TODO Auto-generated method stub
 		return new MyVector(0,0);
 	}
 
-	@Override
 	public void setSpeed(MyVector v) {
 		
 	}
 
-	@Override
 	public double getMass() {
 		return 700000;
 	}
