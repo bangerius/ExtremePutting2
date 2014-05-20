@@ -24,13 +24,19 @@ public class ColisionHandler {
 		// a:s vektor i kolisionsriktningen
 		MyVector aColisionComposandSpeed = cmFromAToB.clone();
 		aColisionComposandSpeed.devide(cmFromAToB.magnitude());
-		aColisionComposandSpeed.multiply(a.getSpeed().magnitude()*Math.cos(MyVector.angleBetweenVectors(a.getSpeed(), cmFromAToB)));
-
+		if(a.getSpeed().x<0.00001&&a.getSpeed().y<0.00001){
+			aColisionComposandSpeed=new MyVector(0, 0);
+		}else{
+			aColisionComposandSpeed.multiply(a.getSpeed().magnitude()*Math.cos(MyVector.angleBetweenVectors(a.getSpeed(), cmFromAToB)));
+		}
 		// b:s vektor i kolisionsriktningen
 		MyVector bColisionComposandSpeed = cmFromAToB.clone();
 		bColisionComposandSpeed.devide(cmFromAToB.magnitude());
-		bColisionComposandSpeed.multiply(b.getSpeed().magnitude()*Math.cos(MyVector.angleBetweenVectors(b.getSpeed(), cmFromAToB)));
-
+		if(b.getSpeed().x<0.00001&&b.getSpeed().y<0.00001){
+			bColisionComposandSpeed=new MyVector(0, 0);
+		}else{
+			bColisionComposandSpeed.multiply(b.getSpeed().magnitude()*Math.cos(MyVector.angleBetweenVectors(b.getSpeed(), cmFromAToB)));
+		}
 		// a:s vinkelräta vektor
 		aOtherComposantSpeed = a.getSpeed().clone();
 		aOtherComposantSpeed.subtract(aColisionComposandSpeed);

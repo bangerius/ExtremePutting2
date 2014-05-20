@@ -17,7 +17,7 @@ import javax.swing.JFrame;
 
 /**
  * PhysicsEmulator class encapsulates an Emulator
- * tjo
+ * 
  * @author Sebastian Bångerius
  */
 public class PhysicsEmulator extends Canvas implements Runnable {
