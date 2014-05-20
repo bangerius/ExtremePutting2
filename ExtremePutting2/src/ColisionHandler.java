@@ -18,17 +18,20 @@ public class ColisionHandler {
 
 	private static void resolveColisionBetweenCircleAndRectangle(
 			ColisionMate a, ColisionMate b) {
+		boolean obviouslyNot=false;
 		Circle circle = (Circle) a.getShape();
 		Rectangle rect = (Rectangle) b.getShape();
 		// Absolute values so that only one corner has to be evaluated.
 		MyVector circleDistance = new MyVector(Math.abs(a.getPosition().x
-				- b.getPosition().x), a.getPosition().y - b.getPosition().y);
+				- b.getPosition().x), Math.abs(a.getPosition().y - b.getPosition().y));
 
 		if (circleDistance.x > (rect.width / 2 + circle.radius)) {
+			obviouslyNot=true;
 		} else if (circleDistance.y > (rect.height / 2 + circle.radius)) {
+			obviouslyNot=true;
 		}
 
-		else if (circleDistance.x <= (rect.width / 2)) {
+		if (circleDistance.x <= (rect.width / 2)&&(!obviouslyNot)) {
 			a.setSpeed(new MyVector((a.getMass() - b.getMass())
 					/ (a.getMass() + b.getMass()) * a.getSpeed().x
 					+ (2 * b.getMass()) / (a.getMass() + b.getMass())
@@ -37,12 +40,12 @@ public class ColisionHandler {
 					/ (b.getMass() + a.getMass()) * b.getSpeed().x
 					+ (2 * a.getMass()) / (b.getMass() + a.getMass())
 					* a.getSpeed().x, b.getSpeed().y));
-		} else if (circleDistance.y <= (rect.height / 2)) {
+		} if (circleDistance.y <= (rect.height / 2)&&(!obviouslyNot)) {
 			a.setSpeed(new MyVector(a.getSpeed().x, (a.getMass() - b.getMass())
 					/ (a.getMass() + b.getMass()) * a.getSpeed().y
 					+ (2 * b.getMass()) / (a.getMass() + b.getMass())
 					* b.getSpeed().y));
-			b.setSpeed(new MyVector(a.getSpeed().x, (b.getMass() - a.getMass())
+			b.setSpeed(new MyVector(b.getSpeed().x, (b.getMass() - a.getMass())
 					/ (b.getMass() + a.getMass()) * b.getSpeed().y
 					+ (2 * a.getMass()) / (b.getMass() + a.getMass())
 					* a.getSpeed().y));
