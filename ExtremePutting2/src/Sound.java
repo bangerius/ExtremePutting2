@@ -4,7 +4,6 @@ import javax.sound.sampled.Clip;
 
 import sun.applet.Main;
 
-
 public class Sound {
 
 	public static synchronized void playSound(final String url) {
