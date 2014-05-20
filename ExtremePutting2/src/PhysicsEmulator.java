@@ -71,7 +71,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		// Skapa allt på skärmen
 		masses = new ArrayList<MassObject>();
 		springs = new ArrayList<Spring>();
-		fp = new MasslessObject(FixedPointImage, WINDOW_WIDTH / 2, 50,
+		
+		fp = new MasslessObject(FixedPointImage, WINDOW_WIDTH / 2000, 2000,
 				new Rectangle(FixedPointImage.getHeight(),
 						FixedPointImage.getWidth()));
 		
@@ -79,6 +80,24 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 				MassObjectImage.getHeight() / 2)));
 		masses.add(new MassObject(MassObjectImage, 25, 200, 600, new Circle(
 				MassObjectImage.getHeight() / 2)));
+		
+		gravity = new AccelerationSource() {
+			public MyVector getAccVector() {
+				return (new MyVector(0, 98.2));
+			}
+
+		};
+		antigravity = new AccelerationSource() {
+			public MyVector getAccVector() {
+				return (new MyVector(0, -98.2));
+			}
+
+		};
+		
+//		for (int i = 0; i < masses.size(); i++) {
+//			masses.get(i).addAffectingAcceleration(gravity);
+//		}
+
 		
 //		masses.add(new MassObject(MassObjectImage, 20, 250, 90, new Circle(
 //				MassObjectImage.getHeight() / 2)));
