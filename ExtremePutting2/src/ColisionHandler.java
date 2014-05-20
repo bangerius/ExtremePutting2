@@ -10,11 +10,37 @@ public class ColisionHandler {
 			colideCircles(a,b);	
 			}
 		} else if(a.getShape().getClass() == Circle.class&&b.getShape().getClass() == Rectangle.class){
-			 // For now.
+			 resolveColisionBetweenCircleAndRectangle(a,b);
 		}else if(b.getShape().getClass() == Circle.class&&a.getShape().getClass() == Rectangle.class){
-			
+			resolveColisionBetweenCircleAndRectangle(b,a);
 		}else{
-			 //for now
+			 //Do nothing for now
+		}
+	}
+
+	private static void resolveColisionBetweenCircleAndRectangle(
+			ColisionMate a, ColisionMate b) {
+		Circle circle = (Circle) a.getShape();
+		Rectangle rect = (Rectangle) b.getShape();
+		//Absolute values so that only one corner has to be evaluated.
+		MyVector circleDistance=new MyVector(Math.abs(a.getPosition().x-b.getPosition().x), a.getPosition().y-b.getPosition().y);
+		
+		if(circleDistance.x>(rect.width/2+circle.radius)){}
+		else if(circleDistance.y>(rect.height/2+circle.radius)){}
+		
+		else if(circleDistance.x <=(rect.width/2)){
+			a.setSpeed(new MyVector((a.getMass()-b.getMass())/(a.getMass()+b.getMass())*a.getSpeed().x+(2*b.getMass())/(a.getMass()+b.getMass())*b.getSpeed().x,a.getSpeed().y));
+			b.setSpeed(new MyVector((b.getMass()-a.getMass())/(b.getMass()+a.getMass())*b.getSpeed().x+(2*a.getMass())/(b.getMass()+a.getMass())*a.getSpeed().x,b.getSpeed().y));
+		}
+		else if(circleDistance.y <=(rect.height/2)){
+			a.setSpeed(new MyVector(a.getSpeed().x,(a.getMass()-b.getMass())/(a.getMass()+b.getMass())*a.getSpeed().y+(2*b.getMass())/(a.getMass()+b.getMass())*b.getSpeed().y));
+			b.setSpeed(new MyVector(a.getSpeed().x,(b.getMass()-a.getMass())/(b.getMass()+a.getMass())*b.getSpeed().y+(2*a.getMass())/(b.getMass()+a.getMass())*a.getSpeed().y));
+		}else{
+			double cornerDistance_sq = Math.pow((circleDistance.x - rect.width/2), 2) +
+					Math.pow((circleDistance.y - rect.height/2),2);
+			if(cornerDistance_sq <= Math.pow(circle.radius, 2)){
+				//Lös vad som händer när ett hörn träffas.
+			}
 		}
 	}
 
