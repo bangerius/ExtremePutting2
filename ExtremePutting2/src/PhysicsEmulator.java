@@ -42,6 +42,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private BufferedImage BallGreenImage;
 	private BufferedImage BallYellowImage;
 	private BufferedImage BGGreenImage;
+	private BufferedImage HWall;
+	private BufferedImage VWall;
 
 	// allting på skärmen
 
@@ -80,7 +82,11 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 					"/assets/bally.png"));
 			BGGreenImage = ImageIO.read(getClass().getResource(
 					"/assets/bggreen.png"));
-
+			HWall = ImageIO.read(getClass().getResource(
+					"/assets/HorizontalWall.png"));
+			VWall = ImageIO.read(getClass().getResource(
+					"/assets/VerticalWall.png"));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -98,6 +104,16 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 				BallYellowImage.getHeight() / 2)));
 		masses.add(new MassObject(BallYellowImage, 25, 1100, 350, new Circle(
 				BallYellowImage.getHeight() / 2)));
+		
+		masses.add(new MassObject(HWall, 1000000, 600, 7, new Rectangle(
+				HWall.getWidth(), HWall.getHeight())));
+//		masses.add(new MassObject(HWall, 1000000, 600, 7, new Rectangle(
+//				HWall.getWidth(), HWall.getHeight())));
+//		
+//		masses.add(new MassObject(VWall, 1000000, 600, 7, new Rectangle(
+//				VWall.getWidth(), VWall.getHeight())));
+//		masses.add(new MassObject(VWall, 1000000, 600, 7, new Rectangle(
+//				VWall.getWidth(), VWall.getHeight())));
 
 		testhit = new AccelerationSource() {
 			public MyVector getAccVector() {
@@ -205,6 +221,11 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		for (int i = 0; i < masses.size(); i++) {
 			masses.get(i).update(delta);
 		}
+//		if (ColisionHandler.checkIfCircleCollidesWithCircle(hole, masses.get(1))){
+//			for (int i = 0; i < masses.size(); i++) {
+//				masses.get(i).update(delta); 	skall vara remove velocity
+//			}
+//		}
 		for (int i = 0; i < masses.size(); i++) {
 			for (int j = i + 1; j < masses.size(); j++) {
 				ColisionHandler.resolveColision(masses.get(i), masses.get(j));
