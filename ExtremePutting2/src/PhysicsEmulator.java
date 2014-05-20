@@ -47,6 +47,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private BufferedImage BGGreenImage;
 	private BufferedImage HWall;
 	private BufferedImage VWall;
+	private BufferedImage TJones;
 
 	// allting på skärmen
 	MasslessObject bg;
@@ -90,6 +91,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 					"/assets/HorizontalWall.png"));
 			VWall = ImageIO.read(getClass().getResource(
 					"/assets/VerticalWall.png"));
+			TJones = ImageIO.read(getClass().getResource(
+					"/assets/tomjones.png"));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,8 +105,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		springs = new ArrayList<Spring>();
 		ColidingShapes = new ArrayList<ColisionMate>();
 		
-		bg = new MasslessObject(BGGreenImage, 750, 500, 
+		bg = new MasslessObject(TJones, 600, 400, 
 				new Circle(0));
+		Sound.playSound("SeventiesPornMusic.wav");
 		hole = new Hole(HoleImage, 1100, 100);
 
 		masses.add(new MassObject(BallYellowImage, 25, 100, 700, new Circle(
