@@ -28,8 +28,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	 * zombie spawnar samt hur snabbt man får skjuta
 	 */
 
-	private static final int WINDOW_WIDTH = 1500;
-	private static final int WINDOW_HEIGHT = 1000;
+	private static final int WINDOW_WIDTH = 1200;
+	private static final int WINDOW_HEIGHT = 800;
 
 	private boolean running;
 
@@ -92,20 +92,20 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		bg = new MasslessObject(BGGreenImage, 750, 500, 
 				new Circle(0));
 		
-		masses.add(new MassObject(BallYellowImage, 25, 100, 900, new Circle(
+		masses.add(new MassObject(HoleImage, 5000000, 1100, 100, new Circle(
+				HoleImage.getHeight() / 5)));
+		masses.add(new MassObject(BallYellowImage, 25, 100, 700, new Circle(
 				BallYellowImage.getHeight() / 2)));
-		masses.add(new MassObject(BallYellowImage, 25, 1100, 500, new Circle(
+		masses.add(new MassObject(BallYellowImage, 25, 1100, 350, new Circle(
 				BallYellowImage.getHeight() / 2)));
-		masses.add(new MassObject(HoleImage, 500000, 1400, 100, new Circle(
-				HoleImage.getHeight() / 3)));
 
 		testhit = new AccelerationSource() {
 			public MyVector getAccVector() {
-				return (new MyVector(60, -23.70));
+				return (new MyVector(60.15, -20));
 			}
 
 		};
-		masses.get(0).addAffectingAcceleration(testhit);
+		masses.get(1).addAffectingAcceleration(testhit);
 
 		gravity = new AccelerationSource() {
 			public MyVector getAccVector() {
