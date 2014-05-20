@@ -46,6 +46,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	// allting på skärmen
 
 	MasslessObject bg;
+	Hole hole;
 	ArrayList<MassObject> masses;
 	ArrayList<Spring> springs;
 	AccelerationSource gravity;
@@ -91,9 +92,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		
 		bg = new MasslessObject(BGGreenImage, 750, 500, 
 				new Circle(0));
-		
-		masses.add(new MassObject(HoleImage, 5000000, 1100, 100, new Circle(
-				HoleImage.getHeight() / 5)));
+		hole = new Hole(HoleImage, 1100, 100);
+
 		masses.add(new MassObject(BallYellowImage, 25, 100, 700, new Circle(
 				BallYellowImage.getHeight() / 2)));
 		masses.add(new MassObject(BallYellowImage, 25, 1100, 350, new Circle(
@@ -105,19 +105,17 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			}
 
 		};
-		masses.get(1).addAffectingAcceleration(testhit);
+		masses.get(0).addAffectingAcceleration(testhit);
 
 		gravity = new AccelerationSource() {
 			public MyVector getAccVector() {
 				return (new MyVector(0, 98.2));
 			}
-
 		};
 		antigravity = new AccelerationSource() {
 			public MyVector getAccVector() {
 				return (new MyVector(0, -98.2));
 			}
-
 		};
 	}
 
@@ -186,6 +184,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 		g.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 		bg.render(g);
+		hole.render(g);
 		for (int i = 0; i < masses.size(); i++) {
 			masses.get(i).render(g);
 		}
