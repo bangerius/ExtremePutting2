@@ -74,34 +74,20 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		fp = new MasslessObject(FixedPointImage, WINDOW_WIDTH / 2, 50,
 				new Rectangle(FixedPointImage.getHeight(),
 						FixedPointImage.getWidth()));
-		masses.add(new MassObject(MassObjectImage, 20, 450, 50, new Circle(
+		
+		masses.add(new MassObject(MassObjectImage, 25, 1200, 200, new Circle(
 				MassObjectImage.getHeight() / 2)));
-		masses.add(new MassObject(MassObjectImage, 35, 300, 100, new Circle(
+		masses.add(new MassObject(MassObjectImage, 25, 200, 600, new Circle(
 				MassObjectImage.getHeight() / 2)));
-
-		masses.add(new MassObject(MassObjectImage, 20, 250, 90, new Circle(
-				MassObjectImage.getHeight() / 2)));
-		masses.add(new MassObject(MassObjectImage, 20, 248, 120, new Circle(
-				MassObjectImage.getHeight() / 2)));
-
-		springs.add(new Spring(60, 255, masses.get(0), fp, SpringImage));
-		springs.add(new Spring(60, 250, masses.get(0), masses.get(1),
-				SpringImage));
-		gravity = new AccelerationSource() {
-			public MyVector getAccVector() {
-				return (new MyVector(0, 98.2));
-			}
-
-		};
-		antigravity = new AccelerationSource() {
-			public MyVector getAccVector() {
-				return (new MyVector(0, -98.2));
-			}
-
-		};
-		for (int i = 0; i < masses.size(); i++) {
-			masses.get(i).addAffectingAcceleration(gravity);
-		}
+		
+//		masses.add(new MassObject(MassObjectImage, 20, 250, 90, new Circle(
+//				MassObjectImage.getHeight() / 2)));
+//		masses.add(new MassObject(MassObjectImage, 20, 248, 120, new Circle(
+//				MassObjectImage.getHeight() / 2)));
+//		springs.add(new Spring(60, 255, masses.get(0), fp, SpringImage));
+//		springs.add(new Spring(60, 250, masses.get(0), masses.get(1),
+//				SpringImage));
+//	
 	}
 
 	/**
@@ -123,7 +109,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		JFrame window = new JFrame("Mitt coola demo");
+		JFrame window = new JFrame("-=ExtremePutting2=-");
 		PhysicsEmulator game = new PhysicsEmulator();
 		window.add(game);
 		window.pack();
