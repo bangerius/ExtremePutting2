@@ -32,6 +32,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private static final int WINDOW_HEIGHT = 800;
 
 	private boolean running;
+	
+	//Ljud
+
 
 	// Våra bilder
 	private BufferedImage MassObjectImage;
@@ -46,7 +49,6 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private BufferedImage VWall;
 
 	// allting på skärmen
-
 	MasslessObject bg;
 	Hole hole;
 	ArrayList<MassObject> masses;
@@ -105,14 +107,14 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		masses.add(new MassObject(BallYellowImage, 25, 1100, 350, new Circle(
 				BallYellowImage.getHeight() / 2)));
 		
-		masses.add(new MassObject(HWall, 1000000, 600, 7, new Rectangle(
+		masses.add(new MassObject(HWall, 10000000, 600, 7, new Rectangle(
 				HWall.getWidth(), HWall.getHeight())));
-		masses.add(new MassObject(HWall, 1000000, 600, 792, new Rectangle(
+		masses.add(new MassObject(HWall, 10000000, 600, 792, new Rectangle(
 				HWall.getWidth(), HWall.getHeight())));
 		
-		masses.add(new MassObject(VWall, 1000000, 7, 400, new Rectangle(
+		masses.add(new MassObject(VWall, 10000000, 7, 400, new Rectangle(
 				VWall.getWidth(), VWall.getHeight())));
-		masses.add(new MassObject(VWall, 1000000, 1192, 400, new Rectangle(
+		masses.add(new MassObject(VWall, 10000000, 1192, 400, new Rectangle(
 				VWall.getWidth(), VWall.getHeight())));
 
 		testhit = new AccelerationSource() {
@@ -122,7 +124,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 		};
 		masses.get(0).addAffectingAcceleration(testhit);
-
+		Sound.playSound("GolfSwing.wav");
+		
 		gravity = new AccelerationSource() {
 			public MyVector getAccVector() {
 				return (new MyVector(0, 98.2));
