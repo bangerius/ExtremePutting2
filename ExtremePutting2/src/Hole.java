@@ -17,7 +17,6 @@ public class Hole extends Renderable implements ColisionMate{
 	}
 
 	public MyVector getSpeed() {
-		// TODO Auto-generated method stub
 		return new MyVector(0,0);
 	}
 
