@@ -52,6 +52,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	MasslessObject bg;
 	Hole hole;
 	ArrayList<MassObject> masses;
+	ArrayList<MasslessObject> fixedShapes;
+	ArrayList<ColisionMate> ColidingShapes;
 	ArrayList<Spring> springs;
 	AccelerationSource gravity;
 	AccelerationSource antigravity;
@@ -96,7 +98,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 		// Skapa allt på skärmen
 		masses = new ArrayList<MassObject>();
+		fixedShapes = new ArrayList<MasslessObject>();
 		springs = new ArrayList<Spring>();
+		ColidingShapes = new ArrayList<ColisionMate>();
 		
 		bg = new MasslessObject(BGGreenImage, 750, 500, 
 				new Circle(0));
@@ -107,16 +111,20 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		masses.add(new MassObject(BallYellowImage, 25, 1100, 350, new Circle(
 				BallYellowImage.getHeight() / 2)));
 		
-		masses.add(new MassObject(HWall, 10000000, 600, 7, new Rectangle(
+		fixedShapes.add(new MasslessObject(HWall, 600, 7, new Rectangle(
 				HWall.getWidth(), HWall.getHeight())));
-		masses.add(new MassObject(HWall, 10000000, 600, 792, new Rectangle(
+		fixedShapes.add(new MasslessObject(HWall, 600, 792, new Rectangle(
 				HWall.getWidth(), HWall.getHeight())));
 		
-		masses.add(new MassObject(VWall, 10000000, 7, 400, new Rectangle(
+		fixedShapes.add(new MasslessObject(VWall, 7, 400, new Rectangle(
 				VWall.getWidth(), VWall.getHeight())));
-		masses.add(new MassObject(VWall, 10000000, 1192, 400, new Rectangle(
+		fixedShapes.add(new MasslessObject(VWall, 1192, 400, new Rectangle(
 				VWall.getWidth(), VWall.getHeight())));
-
+		
+		
+		ColidingShapes.addAll(fixedShapes);
+		ColidingShapes.addAll(masses);
+		
 		testhit = new AccelerationSource() {
 			public MyVector getAccVector() {
 				return (new MyVector(60.15, -20));
@@ -124,7 +132,6 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 		};
 		masses.get(0).addAffectingAcceleration(testhit);
-		Sound.playSound("GolfSwing.wav");
 		
 		gravity = new AccelerationSource() {
 			public MyVector getAccVector() {
@@ -204,6 +211,10 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		g.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 		bg.render(g);
 		hole.render(g);
+		
+		for (int i = 0; i < fixedShapes.size(); i++) {
+			fixedShapes.get(i).render(g);
+		}
 		for (int i = 0; i < masses.size(); i++) {
 			masses.get(i).render(g);
 		}
@@ -229,13 +240,10 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 //				masses.get(i).update(delta); 	skall vara remove velocity
 //			}
 //		}
-		for (int i = 0; i < masses.size(); i++) {
-			for (int j = i + 1; j < masses.size(); j++) {
-				ColisionHandler.resolveColision(masses.get(i), masses.get(j));
+		for (int i = 0; i < ColidingShapes.size(); i++) {
+			for (int j = i + 1; j < ColidingShapes.size(); j++) {
+				ColisionHandler.resolveColision(ColidingShapes.get(i), ColidingShapes.get(j));
 			}
-		}
-		for (Spring spring : springs) {
-			spring.update();
 		}
 	}
 }

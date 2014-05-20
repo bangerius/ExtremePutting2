@@ -5,6 +5,7 @@ public class MasslessObject extends Renderable implements SpringMate, ColisionMa
 	Shape shape; //This is for handling colisions. I don't know if there will be support for other than round and square.
 	public MasslessObject(Image image, double x, double y, Shape _shape){
 		super(image, x, y);
+		shape=_shape;
 	}
 
 	public void addAffectingForce(ForceSource s) {
