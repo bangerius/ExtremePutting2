@@ -88,6 +88,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		// Skapa allt på skärmen
 		masses = new ArrayList<MassObject>();
 		springs = new ArrayList<Spring>();
+<<<<<<< HEAD
 
 		bg = new MasslessObject(BGGreenImage, 750, 500, new Circle(0));
 
@@ -95,6 +96,14 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 				BallYellowImage.getHeight() / 2)));
 		masses.add(new MassObject(BallYellowImage, 25, 1100, 500, new Circle(
 				BallYellowImage.getHeight() / 2)));
+=======
+		
+		bg = new MasslessObject(BGGreenImage, 750, 500, 
+				new Circle(0));
+		
+		masses.add(new MassObject(BallYellowImage, 25, 100, 900, new Circle(5)));
+		masses.add(new MassObject(BallYellowImage, 25, 1100, 500, new Circle(5)));
+>>>>>>> 448b3b1192572526c5b059fc648f99140c92afa8
 		masses.add(new MassObject(HoleImage, 50000, 1400, 100, new Circle(
 				HoleImage.getHeight() / 3)));
 
@@ -204,7 +213,11 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		for (int i = 0; i < springs.size(); i++) {
 			springs.get(i).render(g);
 		}
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 448b3b1192572526c5b059fc648f99140c92afa8
 		// Gör så att allt vi målat ut synns
 		strategy.show();
 	}
