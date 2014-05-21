@@ -48,9 +48,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private BufferedImage HWall;
 	private BufferedImage VWall;
 	private BufferedImage TJones;
-
+	private BufferedImage BallBigImage;
 	// allting på skärmen
-	MasslessObject bg;
+	Renderable bg;
 	Hole hole;
 	ArrayList<MassObject> masses;
 	ArrayList<MasslessObject> fixedShapes;
@@ -85,6 +85,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 					"/assets/ballg.png"));
 			BallYellowImage = ImageIO.read(getClass().getResource(
 					"/assets/bally.png"));
+			BallBigImage = ImageIO.read(getClass().getResource(
+					"/assets/baltoHit.png"));
 			BGGreenImage = ImageIO.read(getClass().getResource(
 					"/assets/bggreen.png"));
 			HWall = ImageIO.read(getClass().getResource(
@@ -105,15 +107,17 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		springs = new ArrayList<Spring>();
 		ColidingShapes = new ArrayList<ColisionMate>();
 		
-		bg = new MasslessObject(TJones, 600, 400, 
-				new Circle(0));
+		bg = new Renderable(BGGreenImage, 600, 400);
+		
 		Sound.playSound("SeventiesPornMusic.wav");
 		hole = new Hole(HoleImage, 1100, 100);
 
 		masses.add(new MassObject(BallYellowImage, 25, 100, 700, new Circle(
 				BallYellowImage.getHeight() / 2)));
-		masses.add(new MassObject(BallYellowImage, 25, 1100, 350, new Circle(
+		masses.add(new MassObject(BallYellowImage, 25, 104, 350, new Circle(
 				BallYellowImage.getHeight() / 2)));
+		masses.add(new MassObject(BallBigImage, 25, 500, 700, new Circle(
+				BallBigImage.getHeight() / 2)));
 		
 		fixedShapes.add(new MasslessObject(HWall, 600, 7, new Rectangle(
 				HWall.getWidth(), HWall.getHeight())));
@@ -131,11 +135,10 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		
 		testhit = new AccelerationSource() {
 			public MyVector getAccVector() {
-				return (new MyVector(60.15, -20));
+				return (new MyVector(60.35, -20));
 			}
 
 		};
-		masses.get(0).addAffectingAcceleration(testhit);
 		
 		gravity = new AccelerationSource() {
 			public MyVector getAccVector() {
@@ -147,6 +150,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 				return (new MyVector(0, -98.2));
 			}
 		};
+		masses.get(0).addAffectingAcceleration(gravity);
+		masses.get(1).addAffectingAcceleration(gravity);
 	}
 
 	/**
@@ -239,11 +244,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		for (int i = 0; i < masses.size(); i++) {
 			masses.get(i).update(delta);
 		}
-//		if (ColisionHandler.checkIfCircleCollidesWithCircle(hole, masses.get(1))){
-//			for (int i = 0; i < masses.size(); i++) {
-//				masses.get(i).update(delta); 	skall vara remove velocity
-//			}
-//		}
+		if (ColisionHandler.checkIfCircleCollidesWithHole(masses.get(2), hole)){
+			System.out.println("Du Vann!");
+		}
 		for (int i = 0; i < ColidingShapes.size(); i++) {
 			for (int j = i + 1; j < ColidingShapes.size(); j++) {
 				ColisionHandler.resolveColision(ColidingShapes.get(i), ColidingShapes.get(j));

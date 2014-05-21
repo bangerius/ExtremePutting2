@@ -18,20 +18,13 @@ public class ColisionHandler {
 
 	private static void resolveColisionBetweenCircleAndRectangle(
 			ColisionMate a, ColisionMate b) {
-		boolean obviouslyNot=false;
 		Circle circle = (Circle) a.getShape();
 		Rectangle rect = (Rectangle) b.getShape();
 		// Absolute values so that only one corner has to be evaluated.
 		MyVector circleDistance = new MyVector(Math.abs(a.getPosition().x
 				- b.getPosition().x), Math.abs(a.getPosition().y - b.getPosition().y));
 
-		if (circleDistance.x > (rect.width / 2 + circle.radius)) {
-			obviouslyNot=true;
-		} else if (circleDistance.y > (rect.height / 2 + circle.radius)) {
-			obviouslyNot=true;
-		}
-
-		if (circleDistance.x <= (rect.width / 2)&&(!obviouslyNot)) {
+		if (circleDistance.x <= (rect.width / 2+circle.radius)) {
 			a.setSpeed(new MyVector((a.getMass() - b.getMass())
 					/ (a.getMass() + b.getMass()) * a.getSpeed().x
 					+ (2 * b.getMass()) / (a.getMass() + b.getMass())
@@ -40,7 +33,7 @@ public class ColisionHandler {
 					/ (b.getMass() + a.getMass()) * b.getSpeed().x
 					+ (2 * a.getMass()) / (b.getMass() + a.getMass())
 					* a.getSpeed().x, b.getSpeed().y));
-		} if (circleDistance.y <= (rect.height / 2)&&(!obviouslyNot)) {
+		} if (circleDistance.y <= (rect.height / 2+circle.radius)) {
 			a.setSpeed(new MyVector(a.getSpeed().x, (a.getMass() - b.getMass())
 					/ (a.getMass() + b.getMass()) * a.getSpeed().y
 					+ (2 * b.getMass()) / (a.getMass() + b.getMass())
@@ -67,6 +60,15 @@ public class ColisionHandler {
 		double dy = a.getPosition().y - b.getPosition().y;
 		return (Math.sqrt(dx * dx + dy * dy) <= (aCircle.radius + bCircle.radius));
 	}
+	
+	public static boolean checkIfCircleCollidesWithHole(ColisionMate a,
+			Hole b) {
+		Circle aCircle = (Circle) a.getShape();
+		Circle bCircle = (Circle) b.getShape();
+		double dx = a.getPosition().x - b.getPosition().x;
+		double dy = a.getPosition().y - b.getPosition().y;
+		return (Math.sqrt(dx * dx + dy * dy) <= (bCircle.radius));
+	}
 
 	public static void colideCircles(ColisionMate a, ColisionMate b) {
 		// Vektorer som är vinkelräta mot stöten och således ej påverkar den
@@ -80,7 +82,7 @@ public class ColisionHandler {
 		// a:s vektor i kolisionsriktningen
 		MyVector aColisionComposandSpeed = cmFromAToB.clone();
 		aColisionComposandSpeed.devide(cmFromAToB.magnitude());
-		if (a.getSpeed().x < 0.00001 && a.getSpeed().y < 0.00001) {
+		if (a.getSpeed().x < 0.0000001 && a.getSpeed().y < 0.0000001) {
 			aColisionComposandSpeed = new MyVector(0, 0);
 		} else {
 			aColisionComposandSpeed.multiply(a.getSpeed().magnitude()
@@ -90,7 +92,7 @@ public class ColisionHandler {
 		// b:s vektor i kolisionsriktningen
 		MyVector bColisionComposandSpeed = cmFromAToB.clone();
 		bColisionComposandSpeed.devide(cmFromAToB.magnitude());
-		if (b.getSpeed().x < 0.00001 && b.getSpeed().y < 0.00001) {
+		if (b.getSpeed().x < 0.0000001 && b.getSpeed().y < 0.0000001) {
 			bColisionComposandSpeed = new MyVector(0, 0);
 		} else {
 			bColisionComposandSpeed.multiply(b.getSpeed().magnitude()
