@@ -32,9 +32,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private static final int WINDOW_HEIGHT = 800;
 
 	private boolean running;
-	
-	//Ljud
 
+	// Ljud
 
 	// Våra bilder
 	private BufferedImage MassObjectImage;
@@ -49,7 +48,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private BufferedImage VWall;
 	private BufferedImage TJones;
 	private BufferedImage BallBigImage;
-	
+
 	// allting på skärmen
 	Renderable bg;
 	Renderable tj;
@@ -64,9 +63,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 	ControllableBall queBall;
 	MassObject targetBall;
-	
-	
+
 	private Controller controller;
+
 	/**
 	 * Create a GameCanvas
 	 */
@@ -75,7 +74,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		setMinimumSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		setPreferredSize(getMinimumSize());
 		setMaximumSize(getMinimumSize());
-		
+
 		controller = new Controller();
 		addKeyListener(controller);
 		addMouseListener(controller);
@@ -105,9 +104,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 					"/assets/HorizontalWall.png"));
 			VWall = ImageIO.read(getClass().getResource(
 					"/assets/VerticalWall.png"));
-			TJones = ImageIO.read(getClass().getResource(
-					"/assets/tomjones.png"));
-			
+			TJones = ImageIO.read(getClass()
+					.getResource("/assets/tomjones.png"));
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -118,51 +117,50 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		fixedShapes = new ArrayList<MasslessObject>();
 		springs = new ArrayList<Spring>();
 		ColidingShapes = new ArrayList<ColisionMate>();
-		
+
 		bg = new Renderable(BGGreenImage, 600, 400);
 		tj = new Renderable(TJones, 600, 400);
-		
+
 		Sound.playSound("SeventiesPornMusic.wav");
 		hole = new Hole(HoleImage, 1100, 100);
-		
+
 		queBall = new ControllableBall(queBallImage, 25, 100, 700, new Circle(
-				queBallImage.getHeight() / 2),controller);
+				queBallImage.getHeight() / 2), controller);
 		targetBall = new MassObject(ballToHit, 25, 400, 700, new Circle(
 				ballToHit.getHeight() / 2));
-		
+
 		masses.add(queBall);
-		
+
 		masses.add(targetBall);
-		
-		fixedShapes.add(new MasslessObject(HWall, 600, 7, new Rectangle(
-				HWall.getWidth(), HWall.getHeight())));
-		fixedShapes.add(new MasslessObject(HWall, 600, 792, new Rectangle(
-				HWall.getWidth(), HWall.getHeight())));
-		
-		fixedShapes.add(new MasslessObject(VWall, 7, 400, new Rectangle(
-				VWall.getWidth(), VWall.getHeight())));
+
+		fixedShapes.add(new MasslessObject(HWall, 600, 7, new Rectangle(HWall
+				.getWidth(), HWall.getHeight())));
+		fixedShapes.add(new MasslessObject(HWall, 600, 792, new Rectangle(HWall
+				.getWidth(), HWall.getHeight())));
+
+		fixedShapes.add(new MasslessObject(VWall, 7, 400, new Rectangle(VWall
+				.getWidth(), VWall.getHeight())));
 		fixedShapes.add(new MasslessObject(VWall, 1192, 400, new Rectangle(
 				VWall.getWidth(), VWall.getHeight())));
-		
-		
+
 		ColidingShapes.addAll(fixedShapes);
 		ColidingShapes.addAll(masses);
-		
+
 		grassFriction = new ForceSource() {
 			public MyVector getForceVector(Object o) {
 				ColisionMate cm = (ColisionMate) o;
 				if (cm.getSpeed().magnitude() <= 10) {
-					MyVector frictionForce=cm.getSpeed().clone();
-					frictionForce.multiply(-1*cm.getMass());
+					MyVector frictionForce = cm.getSpeed().clone();
+					frictionForce.multiply(-1 * cm.getMass());
 					return frictionForce;
 				}
-				MyVector frictionForce=cm.getSpeed().clone();
-				frictionForce.multiply(-0.3*cm.getMass());
+				MyVector frictionForce = cm.getSpeed().clone();
+				frictionForce.multiply(-0.3 * cm.getMass());
 				return frictionForce;
 			}
 
 		};
-		
+
 		gravity = new AccelerationSource() {
 			public MyVector getAccVector() {
 				return (new MyVector(0, 98.2));
@@ -232,25 +230,30 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		// Hämta grafikobjektet
 		BufferStrategy strategy = getBufferStrategy();
 		Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
-
-		// Måla bakgrund, zombies och kulor
-		// g.drawImage(backgroundImage, 0, 0, null);
-
-		g.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-		bg.render(g);
-		hole.render(g);
 		
-		for (int i = 0; i < fixedShapes.size(); i++) {
-			fixedShapes.get(i).render(g);
+		if (running == false) {
+			tj.render(g);
+			strategy.show();
+		} else {
+			// Måla bakgrund, zombies och kulor
+			// g.drawImage(backgroundImage, 0, 0, null);
+
+			g.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+			bg.render(g);
+			hole.render(g);
+
+			for (int i = 0; i < fixedShapes.size(); i++) {
+				fixedShapes.get(i).render(g);
+			}
+			for (int i = 0; i < masses.size(); i++) {
+				masses.get(i).render(g);
+			}
+			for (int i = 0; i < springs.size(); i++) {
+				springs.get(i).render(g);
+			}
+			// Gör så att allt vi målat ut synns
+			strategy.show();
 		}
-		for (int i = 0; i < masses.size(); i++) {
-			masses.get(i).render(g);
-		}
-		for (int i = 0; i < springs.size(); i++) {
-			springs.get(i).render(g);
-		}
-		// Gör så att allt vi målat ut synns
-		strategy.show();
 	}
 
 	/**
@@ -263,17 +266,15 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		for (int i = 0; i < masses.size(); i++) {
 			masses.get(i).update(delta);
 		}
-		if (ColisionHandler.checkIfCircleCollidesWithHole(targetBall, hole)){
+		if (ColisionHandler.checkIfCircleCollidesWithHole(targetBall, hole)) {
 			running = false;
-			BufferStrategy strat = getBufferStrategy();
-			Graphics2D p = (Graphics2D) strat.getDrawGraphics();
-			tj.render(p);
-			strat.show();
 			Sound.playSound("Applause2.wav");
+			render();
 		}
 		for (int i = 0; i < ColidingShapes.size(); i++) {
 			for (int j = i + 1; j < ColidingShapes.size(); j++) {
-				ColisionHandler.resolveColision(ColidingShapes.get(i), ColidingShapes.get(j));
+				ColisionHandler.resolveColision(ColidingShapes.get(i),
+						ColidingShapes.get(j));
 			}
 		}
 	}
