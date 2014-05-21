@@ -34,7 +34,6 @@ public class MasslessObject extends Renderable implements SpringMate, ColisionMa
 		return 6000000;
 	}
 
-	@Override
 	public void update(long l) {
 
 	}
