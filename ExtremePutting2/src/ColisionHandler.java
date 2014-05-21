@@ -5,18 +5,22 @@ public class ColisionHandler {
 			if (checkIfCircleCollidesWithCircle(a, b)) {
 				System.out.println("Cicle colision");
 				colideCircles(a, b);
+				a.update(3);
+				b.update(3);
 			}
 		} else if (a.getShape().getClass() == Circle.class
 				&& b.getShape().getClass() == Rectangle.class) {
 			resolveColisionBetweenCircleAndRectangle(a, b);
+			a.update(3);
+			b.update(3);
 		} else if (b.getShape().getClass() == Circle.class
 				&& a.getShape().getClass() == Rectangle.class) {
 			resolveColisionBetweenCircleAndRectangle(b, a);
+			a.update(3);
+			b.update(3);
 		} else {
 			// Do nothing for now
 		}
-		a.update(1);
-		b.update(1);
 	}
 
 	private static void resolveColisionBetweenCircleAndRectangle(
