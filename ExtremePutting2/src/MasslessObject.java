@@ -33,4 +33,9 @@ public class MasslessObject extends Renderable implements SpringMate, ColisionMa
 	public double getMass() {
 		return 6000000;
 	}
+
+	@Override
+	public void update(long l) {
+
+	}
 }

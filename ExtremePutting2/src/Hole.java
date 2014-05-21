@@ -28,4 +28,9 @@ public class Hole extends Renderable implements ColisionMate{
 		return 700000;
 	}
 
+	@Override
+	public void update(long l) {
+		
+	}
+
 }

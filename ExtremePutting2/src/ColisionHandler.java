@@ -15,6 +15,8 @@ public class ColisionHandler {
 		} else {
 			// Do nothing for now
 		}
+		a.update(1);
+		b.update(1);
 	}
 
 	private static void resolveColisionBetweenCircleAndRectangle(
