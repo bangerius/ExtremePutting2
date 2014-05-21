@@ -147,7 +147,6 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		ColidingShapes.addAll(masses);
 		
 		grassFriction = new ForceSource() {
-			@Override
 			public MyVector getForceVector(Object o) {
 				ColisionMate cm = (ColisionMate) o;
 				if (cm.getSpeed().magnitude() <= 10) {
