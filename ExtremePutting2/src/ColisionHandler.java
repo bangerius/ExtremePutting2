@@ -3,6 +3,7 @@ public class ColisionHandler {
 		if (a.getShape().getClass() == Circle.class
 				&& b.getShape().getClass() == Circle.class) {
 			if (checkIfCircleCollidesWithCircle(a, b)) {
+				System.out.println("Cicle colision");
 				colideCircles(a, b);
 			}
 		} else if (a.getShape().getClass() == Circle.class
@@ -82,7 +83,7 @@ public class ColisionHandler {
 		// a:s vektor i kolisionsriktningen
 		MyVector aColisionComposandSpeed = cmFromAToB.clone();
 		aColisionComposandSpeed.devide(cmFromAToB.magnitude());
-		if (a.getSpeed().x < 0.0000001 && a.getSpeed().y < 0.0000001) {
+		if (Math.abs(a.getSpeed().x) < 0.0000001 && Math.abs(a.getSpeed().y) < 0.0000001) {
 			aColisionComposandSpeed = new MyVector(0, 0);
 		} else {
 			aColisionComposandSpeed.multiply(a.getSpeed().magnitude()
@@ -92,7 +93,7 @@ public class ColisionHandler {
 		// b:s vektor i kolisionsriktningen
 		MyVector bColisionComposandSpeed = cmFromAToB.clone();
 		bColisionComposandSpeed.devide(cmFromAToB.magnitude());
-		if (b.getSpeed().x < 0.0000001 && b.getSpeed().y < 0.0000001) {
+		if (Math.abs(b.getSpeed().x) < 0.0000001 && Math.abs(b.getSpeed().y) < 0.0000001) {
 			bColisionComposandSpeed = new MyVector(0, 0);
 		} else {
 			bColisionComposandSpeed.multiply(b.getSpeed().magnitude()
@@ -126,6 +127,5 @@ public class ColisionHandler {
 		bNewSpeed.add(atempSpeed);
 		bNewSpeed.add(bOtherComposantSpeed);
 		b.setSpeed(bNewSpeed);
-
 	}
 }
