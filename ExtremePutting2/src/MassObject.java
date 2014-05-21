@@ -37,7 +37,7 @@ public class MassObject extends Renderable implements SpringMate, ColisionMate{
 		netAcc.devide(mass);
 		
 		for (AccelerationSource a : affectingAccs) {
-			netAcc.add(a.getAccVector());
+			netAcc.add(a.getAccVector(this));
 		}
 		
 		speed.x += netAcc.x * (delta/1000.0);

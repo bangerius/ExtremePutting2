@@ -30,22 +30,17 @@ public class ControllableBall extends MassObject {
 			netAcc.devide(mass);
 
 			for (AccelerationSource a : affectingAccs) {
-				netAcc.add(a.getAccVector());
+				netAcc.add(a.getAccVector(this));
 			}
 			speed.x += netAcc.x * (delta / 1000.0);
 			speed.y += netAcc.y * (delta / 1000.0);
 			xpos += speed.x * (delta / 1000.0);
 			ypos += speed.y * (delta / 1000.0);
 
-			if (speed.magnitude() <= 10) {
-				enable();
-				System.out.println("Du kan skjuta nu.");
-			}
-
 		} else {
 			if (controller.mouseWasDown()) {
-				setSpeed(new MyVector((controller.mouseX - xpos),
-						(controller.mouseY - ypos)));
+				setSpeed(new MyVector((controller.mouseX - xpos)/3,
+						(controller.mouseY - ypos)/3));
 				disable();
 				System.out.println("Du har skjutit, hastighet i x-led är nu: "
 						+ speed.x + " och i y-led: " + speed.y);

@@ -5,8 +5,8 @@ public class ColisionHandler {
 			if (checkIfCircleCollidesWithCircle(a, b)) {
 				System.out.println("Cicle colision");
 				colideCircles(a, b);
-				a.update(3);
-				b.update(3);
+				a.update(5);
+				b.update(5);
 			}
 		} else if (a.getShape().getClass() == Circle.class
 				&& b.getShape().getClass() == Rectangle.class) {

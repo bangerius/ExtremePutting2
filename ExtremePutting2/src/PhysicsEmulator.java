@@ -48,6 +48,11 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private BufferedImage VWall;
 	private BufferedImage TJones;
 	private BufferedImage BallBigImage;
+	
+	private BufferedImage BoosterUpImage;
+	private BufferedImage BoosterRightImage;
+	private BufferedImage BoosterDownImage;
+	private BufferedImage BoosterLeftImage;
 
 	// allting på skärmen
 	Renderable bg;
@@ -57,6 +62,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	ArrayList<MasslessObject> fixedShapes;
 	ArrayList<ColisionMate> ColidingShapes;
 	ArrayList<Spring> springs;
+	ArrayList<Booster> boosters;
 	AccelerationSource gravity;
 	AccelerationSource antigravity;
 	ForceSource grassFriction;
@@ -97,7 +103,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			BallYellowImage = ImageIO.read(getClass().getResource(
 					"/assets/bally.png"));
 			BallBigImage = ImageIO.read(getClass().getResource(
-					"/assets/baltoHit.png"));
+					"/assets/bigball.png"));
 			BGGreenImage = ImageIO.read(getClass().getResource(
 					"/assets/bggreen.png"));
 			HWall = ImageIO.read(getClass().getResource(
@@ -106,6 +112,14 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 					"/assets/VerticalWall.png"));
 			TJones = ImageIO.read(getClass()
 					.getResource("/assets/tomjones.png"));
+			BoosterDownImage = ImageIO.read(getClass()
+					.getResource("/assets/boost_down_big.png"));
+			BoosterRightImage = ImageIO.read(getClass()
+					.getResource("/assets/boost_right_big.png"));
+			BoosterUpImage = ImageIO.read(getClass()
+					.getResource("/assets/boost_up_big.png"));
+			BoosterLeftImage = ImageIO.read(getClass()
+					.getResource("/assets/boost_left_big.png"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,6 +131,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		fixedShapes = new ArrayList<MasslessObject>();
 		springs = new ArrayList<Spring>();
 		ColidingShapes = new ArrayList<ColisionMate>();
+		boosters = new ArrayList<Booster>();
 
 		bg = new Renderable(BGGreenImage, 600, 400);
 		tj = new Renderable(TJones, 600, 400);
@@ -130,8 +145,13 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 				ballToHit.getHeight() / 2));
 
 		masses.add(queBall);
-
 		masses.add(targetBall);
+		
+		boosters.add(new Booster(BoosterUpImage, Direction.UP, 100, 80, 300));
+		boosters.add(new Booster(BoosterDownImage, Direction.DOWN, 100, 400, 80));
+		boosters.add(new Booster(BoosterRightImage, Direction.RIGHT, 100, 180, 300));
+		boosters.add(new Booster(BoosterLeftImage, Direction.LEFT, 100, 600, 500));
+		boosters.add(new Booster(BoosterLeftImage, Direction.LEFT, 100, 700, 200));
 
 		fixedShapes.add(new MasslessObject(HWall, 600, 7, new Rectangle(HWall
 				.getWidth(), HWall.getHeight())));
@@ -142,6 +162,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 				.getWidth(), VWall.getHeight())));
 		fixedShapes.add(new MasslessObject(VWall, 1192, 400, new Rectangle(
 				VWall.getWidth(), VWall.getHeight())));
+		fixedShapes.add(new MasslessObject(BallBigImage, WINDOW_WIDTH/2, WINDOW_HEIGHT/2, new Circle(BallBigImage.getHeight() / 2)));
+		fixedShapes.add(new MasslessObject(BallBigImage, WINDOW_WIDTH*2/3, WINDOW_HEIGHT*2/3, new Circle(BallBigImage.getHeight() / 2)));
 
 		ColidingShapes.addAll(fixedShapes);
 		ColidingShapes.addAll(masses);
@@ -149,25 +171,30 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		grassFriction = new ForceSource() {
 			public MyVector getForceVector(Object o) {
 				ColisionMate cm = (ColisionMate) o;
-				if (cm.getSpeed().magnitude() <= 10) {
-					MyVector frictionForce = cm.getSpeed().clone();
-					frictionForce.multiply(-1 * cm.getMass());
-					return frictionForce;
-				}
 				MyVector frictionForce = cm.getSpeed().clone();
-				frictionForce.multiply(-0.3 * cm.getMass());
-				return frictionForce;
+				if(cm.getSpeed().magnitude()>0.00001){
+				frictionForce.devide(cm.getSpeed().magnitude());
+				}else{
+					frictionForce = new MyVector(0,0);
+				}
+					frictionForce.multiply(-6 * cm.getMass());
+					return frictionForce;
 			}
 
 		};
 
 		gravity = new AccelerationSource() {
-			public MyVector getAccVector() {
+			public MyVector getAccVector(Object o) {
 				return (new MyVector(0, 98.2));
 			}
 		};
 		for (MassObject m : masses) {
 			m.addAffectingForce(grassFriction);
+		}
+		for (MassObject m : masses) {
+			for (Booster b : boosters) {
+				m.addAffectingAcceleration(b);
+			}
 		}
 	}
 
@@ -230,7 +257,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		// Hämta grafikobjektet
 		BufferStrategy strategy = getBufferStrategy();
 		Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
-		
+
 		if (running == false) {
 			tj.render(g);
 			strategy.show();
@@ -244,6 +271,9 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 			for (int i = 0; i < fixedShapes.size(); i++) {
 				fixedShapes.get(i).render(g);
+			}
+			for (Booster b : boosters) {
+				b.render(g);
 			}
 			for (int i = 0; i < masses.size(); i++) {
 				masses.get(i).render(g);
@@ -263,9 +293,15 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	 *            the delta in milliseconds since last iteration
 	 */
 	private void update(long delta) {
+		double totalVelocity=0;
 		for (int i = 0; i < masses.size(); i++) {
 			masses.get(i).update(delta);
+			totalVelocity+=masses.get(i).speed.magnitude();
 		}
+		if(totalVelocity<=1){
+			queBall.enable();
+		}
+		
 		if (ColisionHandler.checkIfCircleCollidesWithHole(targetBall, hole)) {
 			running = false;
 			Sound.playSound("Applause2.wav");

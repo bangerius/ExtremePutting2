@@ -1,4 +1,4 @@
 
 public interface AccelerationSource {
-	public MyVector getAccVector();
+	public MyVector getAccVector(Object o);
 }
