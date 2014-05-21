@@ -5,7 +5,7 @@ public class Hole extends Renderable implements ColisionMate{
 	Shape shape; //This is for handling colisions. I don't know if there will be support for other than round and square.
 	public Hole(Image image, double x, double y) {
 		super(image, x, y);
-		shape = new Circle(image.getWidth(null)/5);
+		shape = new Circle(image.getWidth(null)/2);
 	}
 
 	public MyVector getPosition() {

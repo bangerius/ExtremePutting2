@@ -52,6 +52,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	
 	// allting på skärmen
 	Renderable bg;
+	Renderable tj;
 	Hole hole;
 	ArrayList<MassObject> masses;
 	ArrayList<MasslessObject> fixedShapes;
@@ -119,6 +120,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		ColidingShapes = new ArrayList<ColisionMate>();
 		
 		bg = new Renderable(BGGreenImage, 600, 400);
+		tj = new Renderable(TJones, 600, 400);
 		
 		Sound.playSound("SeventiesPornMusic.wav");
 		hole = new Hole(HoleImage, 1100, 100);
@@ -262,8 +264,12 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			masses.get(i).update(delta);
 		}
 		if (ColisionHandler.checkIfCircleCollidesWithHole(targetBall, hole)){
-			System.out.println("Du Vann!");
-			System.exit(0);
+			running = false;
+			BufferStrategy strat = getBufferStrategy();
+			Graphics2D p = (Graphics2D) strat.getDrawGraphics();
+			tj.render(p);
+			strat.show();
+			Sound.playSound("Applause2.wav");
 		}
 		for (int i = 0; i < ColidingShapes.size(); i++) {
 			for (int j = i + 1; j < ColidingShapes.size(); j++) {
