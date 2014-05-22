@@ -48,7 +48,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	private BufferedImage VWall;
 	private BufferedImage TJones;
 	private BufferedImage BallBigImage;
-	
+
 	private BufferedImage BoosterUpImage;
 	private BufferedImage BoosterRightImage;
 	private BufferedImage BoosterDownImage;
@@ -69,6 +69,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 	ControllableBall queBall;
 	MassObject targetBall;
+	MassObject movingHinder;
 
 	private Controller controller;
 
@@ -112,14 +113,14 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 					"/assets/VerticalWall.png"));
 			TJones = ImageIO.read(getClass()
 					.getResource("/assets/tomjones.png"));
-			BoosterDownImage = ImageIO.read(getClass()
-					.getResource("/assets/boost_down_big.png"));
-			BoosterRightImage = ImageIO.read(getClass()
-					.getResource("/assets/boost_right_big.png"));
-			BoosterUpImage = ImageIO.read(getClass()
-					.getResource("/assets/boost_up_big.png"));
-			BoosterLeftImage = ImageIO.read(getClass()
-					.getResource("/assets/boost_left_big.png"));
+			BoosterDownImage = ImageIO.read(getClass().getResource(
+					"/assets/boost_down_big.png"));
+			BoosterRightImage = ImageIO.read(getClass().getResource(
+					"/assets/boost_right_big.png"));
+			BoosterUpImage = ImageIO.read(getClass().getResource(
+					"/assets/boost_up_big.png"));
+			BoosterLeftImage = ImageIO.read(getClass().getResource(
+					"/assets/boost_left_big.png"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -143,15 +144,23 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 				queBallImage.getHeight() / 2), controller);
 		targetBall = new MassObject(ballToHit, 25, 400, 700, new Circle(
 				ballToHit.getHeight() / 2));
+		movingHinder = new MassObject(BallBigImage, 400, 1000, 550, new Circle(
+				BallBigImage.getHeight() / 2));
 
 		masses.add(queBall);
 		masses.add(targetBall);
-		
+		masses.add(movingHinder);
+
 		boosters.add(new Booster(BoosterUpImage, Direction.UP, 100, 80, 300));
 		boosters.add(new Booster(BoosterDownImage, Direction.DOWN, 100, 400, 80));
-		boosters.add(new Booster(BoosterRightImage, Direction.RIGHT, 100, 180, 300));
-		boosters.add(new Booster(BoosterLeftImage, Direction.LEFT, 100, 600, 500));
-		boosters.add(new Booster(BoosterLeftImage, Direction.LEFT, 100, 700, 200));
+		boosters.add(new Booster(BoosterRightImage, Direction.RIGHT, 100, 180,
+				300));
+		boosters.add(new Booster(BoosterLeftImage, Direction.LEFT, 100, 600,
+				500));
+		boosters.add(new Booster(BoosterLeftImage, Direction.LEFT, 100, 700,
+				200));
+		boosters.add(new Booster(BoosterUpImage, Direction.UP, 100, 1000,
+				700));
 
 		fixedShapes.add(new MasslessObject(HWall, 600, 7, new Rectangle(HWall
 				.getWidth(), HWall.getHeight())));
@@ -162,8 +171,19 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 				.getWidth(), VWall.getHeight())));
 		fixedShapes.add(new MasslessObject(VWall, 1192, 400, new Rectangle(
 				VWall.getWidth(), VWall.getHeight())));
-		fixedShapes.add(new MasslessObject(BallBigImage, WINDOW_WIDTH/2, WINDOW_HEIGHT/2, new Circle(BallBigImage.getHeight() / 2)));
-		fixedShapes.add(new MasslessObject(BallBigImage, WINDOW_WIDTH*2/3, WINDOW_HEIGHT*2/3, new Circle(BallBigImage.getHeight() / 2)));
+		fixedShapes.add(new MasslessObject(BallBigImage, 450, 300, new Circle(
+				BallBigImage.getHeight() / 2)));
+		fixedShapes.add(new MasslessObject(BallBigImage, 1000, 200, new Circle(
+				BallBigImage.getHeight() / 2)));
+
+		springs.add(new Spring(60, 300, 0, movingHinder, fixedShapes.get(1),
+				SpringImage));
+		springs.add(new Spring(60, 300, 0, movingHinder, fixedShapes.get(3),
+				SpringImage));
+		springs.add(new Spring(60, 300, 0, movingHinder, fixedShapes.get(0),
+				SpringImage));
+		springs.add(new Spring(60, 300, 0, movingHinder, fixedShapes.get(2),
+				SpringImage));
 
 		ColidingShapes.addAll(fixedShapes);
 		ColidingShapes.addAll(masses);
@@ -172,13 +192,13 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			public MyVector getForceVector(Object o) {
 				ColisionMate cm = (ColisionMate) o;
 				MyVector frictionForce = cm.getSpeed().clone();
-				if(cm.getSpeed().magnitude()>0.00001){
-				frictionForce.devide(cm.getSpeed().magnitude());
-				}else{
-					frictionForce = new MyVector(0,0);
+				if (cm.getSpeed().magnitude() > 0.00001) {
+					frictionForce.devide(cm.getSpeed().magnitude());
+				} else {
+					frictionForce = new MyVector(0, 0);
 				}
-					frictionForce.multiply(-6 * cm.getMass());
-					return frictionForce;
+				frictionForce.multiply(-6 * cm.getMass());
+				return frictionForce;
 			}
 
 		};
@@ -189,7 +209,8 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			}
 		};
 		for (MassObject m : masses) {
-			m.addAffectingForce(grassFriction);
+			if (m != movingHinder)
+				m.addAffectingForce(grassFriction);
 		}
 		for (MassObject m : masses) {
 			for (Booster b : boosters) {
@@ -293,15 +314,19 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	 *            the delta in milliseconds since last iteration
 	 */
 	private void update(long delta) {
-		double totalVelocity=0;
-		for (int i = 0; i < masses.size(); i++) {
-			masses.get(i).update(delta);
-			totalVelocity+=masses.get(i).speed.magnitude();
+		double totalVelocity = 0;
+		for (MassObject mass : masses) {
+			mass.update(delta);
+			if(mass!=movingHinder){
+			totalVelocity += mass.speed.magnitude();
+			}
 		}
-		if(totalVelocity<=1){
+		if (totalVelocity <= 1) {
 			queBall.enable();
+		}else{queBall.disable();}
+		for (Spring spring : springs) {
+			spring.update();
 		}
-		
 		if (ColisionHandler.checkIfCircleCollidesWithHole(targetBall, hole)) {
 			running = false;
 			Sound.playSound("Applause2.wav");

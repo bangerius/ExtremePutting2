@@ -11,9 +11,9 @@ public class Spring extends Renderable implements ForceSource{
 	SpringMate mate1;
 	SpringMate mate2;
 	
-	public Spring(double _springConstant, double _desiredLength, SpringMate _mate1, SpringMate _mate2, Image image){
+	public Spring(double _springConstant, double _desiredLength, double _frictionconstant, SpringMate _mate1, SpringMate _mate2, Image image){
 		super(image, 0, 0);
-		frictionConstant=-0.1;
+		frictionConstant=-_frictionconstant;
 		springConstant = _springConstant;
 		desiredLength = _desiredLength;
 		mate1 = _mate1;
