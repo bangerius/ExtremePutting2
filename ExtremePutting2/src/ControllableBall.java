@@ -39,8 +39,10 @@ public class ControllableBall extends MassObject {
 
 		} else {
 			if (controller.mouseWasDown()) {
-				setSpeed(new MyVector((controller.mouseX - xpos)/3,
-						(controller.mouseY - ypos)/3));
+				Sound.playSound("ForeGolf.wav");
+				setSpeed(new MyVector((controller.mouseX - xpos)/2,
+						(controller.mouseY - ypos)/2));
+				Sound.playSound("GolfSwing.wav");
 				disable();
 				System.out.println("Du har skjutit, hastighet i x-led är nu: "
 						+ speed.x + " och i y-led: " + speed.y);

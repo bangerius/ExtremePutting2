@@ -142,24 +142,24 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 
 		queBall = new ControllableBall(queBallImage, 25, 100, 700, new Circle(
 				queBallImage.getHeight() / 2), controller);
-		targetBall = new MassObject(ballToHit, 25, 400, 700, new Circle(
+		targetBall = new MassObject(ballToHit, 25, 400, 500, new Circle(
 				ballToHit.getHeight() / 2));
-		movingHinder = new MassObject(BallBigImage, 400, 1000, 550, new Circle(
+		movingHinder = new MassObject(BallBigImage, 60, WINDOW_WIDTH/2, WINDOW_HEIGHT/2, new Circle(
 				BallBigImage.getHeight() / 2));
 
 		masses.add(queBall);
 		masses.add(targetBall);
 		masses.add(movingHinder);
 
-		boosters.add(new Booster(BoosterUpImage, Direction.UP, 100, 80, 300));
-		boosters.add(new Booster(BoosterDownImage, Direction.DOWN, 100, 400, 80));
-		boosters.add(new Booster(BoosterRightImage, Direction.RIGHT, 100, 180,
+		boosters.add(new Booster(BoosterUpImage, Direction.UP, 300, 80, 300));
+		boosters.add(new Booster(BoosterDownImage, Direction.DOWN, 300, 400, 80));
+		boosters.add(new Booster(BoosterRightImage, Direction.RIGHT, 300, 180,
 				300));
-		boosters.add(new Booster(BoosterLeftImage, Direction.LEFT, 100, 600,
+		boosters.add(new Booster(BoosterLeftImage, Direction.LEFT, 300, 600,
 				500));
-		boosters.add(new Booster(BoosterLeftImage, Direction.LEFT, 100, 700,
+		boosters.add(new Booster(BoosterLeftImage, Direction.LEFT, 300, 700,
 				200));
-		boosters.add(new Booster(BoosterUpImage, Direction.UP, 100, 1000,
+		boosters.add(new Booster(BoosterUpImage, Direction.UP, 300, 1000,
 				700));
 
 		fixedShapes.add(new MasslessObject(HWall, 600, 7, new Rectangle(HWall
@@ -171,18 +171,18 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 				.getWidth(), VWall.getHeight())));
 		fixedShapes.add(new MasslessObject(VWall, 1192, 400, new Rectangle(
 				VWall.getWidth(), VWall.getHeight())));
-		fixedShapes.add(new MasslessObject(BallBigImage, 450, 300, new Circle(
+		fixedShapes.add(new MasslessObject(BallBigImage, 300, 200, new Circle(
 				BallBigImage.getHeight() / 2)));
-		fixedShapes.add(new MasslessObject(BallBigImage, 1000, 200, new Circle(
+		fixedShapes.add(new MasslessObject(BallBigImage, 900, 600, new Circle(
 				BallBigImage.getHeight() / 2)));
 
-		springs.add(new Spring(60, 300, 0, movingHinder, fixedShapes.get(1),
+		springs.add(new Spring(200, 300, -0.0, movingHinder, fixedShapes.get(1),
 				SpringImage));
-		springs.add(new Spring(60, 300, 0, movingHinder, fixedShapes.get(3),
+		springs.add(new Spring(200, 300, -0.0, movingHinder, fixedShapes.get(3),
 				SpringImage));
-		springs.add(new Spring(60, 300, 0, movingHinder, fixedShapes.get(0),
+		springs.add(new Spring(200, 300, -0.0, movingHinder, fixedShapes.get(0),
 				SpringImage));
-		springs.add(new Spring(60, 300, 0, movingHinder, fixedShapes.get(2),
+		springs.add(new Spring(200, 300, -0.0, movingHinder, fixedShapes.get(2),
 				SpringImage));
 
 		ColidingShapes.addAll(fixedShapes);
@@ -197,7 +197,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 				} else {
 					frictionForce = new MyVector(0, 0);
 				}
-				frictionForce.multiply(-6 * cm.getMass());
+				frictionForce.multiply(-25 * cm.getMass());
 				return frictionForce;
 			}
 
@@ -209,11 +209,11 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			}
 		};
 		for (MassObject m : masses) {
-			if (m != movingHinder)
 				m.addAffectingForce(grassFriction);
 		}
 		for (MassObject m : masses) {
 			for (Booster b : boosters) {
+				if (m != movingHinder)
 				m.addAffectingAcceleration(b);
 			}
 		}
@@ -328,8 +328,15 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		for (Spring spring : springs) {
 			spring.update();
 		}
+		if (ColisionHandler.checkIfCircleCollidesWithHole(queBall, hole)) {
+			running = false;
+			Sound.playSound("GolfBallInHole.wav");
+			Sound.playSound("Horse-Neigh2.wav");
+			render();
+		}
 		if (ColisionHandler.checkIfCircleCollidesWithHole(targetBall, hole)) {
 			running = false;
+			Sound.playSound("GolfBallInHole.wav");
 			Sound.playSound("Applause2.wav");
 			render();
 		}
