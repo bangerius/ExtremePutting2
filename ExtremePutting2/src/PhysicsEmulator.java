@@ -94,7 +94,7 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			MassObjectImage = ImageIO.read(getClass().getResource(
 					"/assets/bullet.png"));
 			SpringImage = ImageIO.read(getClass().getResource(
-					"/assets/spring.png"));
+					"/assets/spring2.png"));
 			FixedPointImage = ImageIO.read(getClass().getResource(
 					"/assets/masslesspoint.png"));
 			ballToHit = ImageIO.read(getClass().getResource(
