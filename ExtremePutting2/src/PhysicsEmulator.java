@@ -321,9 +321,10 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 			totalVelocity += mass.speed.magnitude();
 			}
 		}
-		if (totalVelocity <= 1) {
+		if (totalVelocity <= 1&&!queBall.controllable()) {
 			queBall.enable();
-		}else{queBall.disable();}
+			System.out.println("Du kan skjuta nu");
+		}else if(totalVelocity >= 1&&queBall.controllable()){queBall.disable(); System.out.println("Vänta på att bollarna ska bli stilla igen");}
 		for (Spring spring : springs) {
 			spring.update();
 		}

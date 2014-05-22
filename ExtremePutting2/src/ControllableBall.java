@@ -61,4 +61,7 @@ public class ControllableBall extends MassObject {
 	public void enable() {
 		disabled = false;
 	}
+	public boolean controllable(){
+		return !disabled;
+	}
 }

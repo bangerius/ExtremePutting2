@@ -3,7 +3,6 @@ public class ColisionHandler {
 		if (a.getShape().getClass() == Circle.class
 				&& b.getShape().getClass() == Circle.class) {
 			if (checkIfCircleCollidesWithCircle(a, b)) {
-				System.out.println("Cicle colision");
 				colideCircles(a, b);
 				a.update(5);
 				b.update(5);
