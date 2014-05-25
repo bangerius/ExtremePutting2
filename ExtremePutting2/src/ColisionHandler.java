@@ -69,7 +69,6 @@ public class ColisionHandler {
 	
 	public static boolean checkIfCircleCollidesWithHole(ColisionMate a,
 			Hole b) {
-		Circle aCircle = (Circle) a.getShape();
 		Circle bCircle = (Circle) b.getShape();
 		double dx = a.getPosition().x - b.getPosition().x;
 		double dy = a.getPosition().y - b.getPosition().y;

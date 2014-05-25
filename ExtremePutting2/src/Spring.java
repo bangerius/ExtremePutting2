@@ -1,6 +1,5 @@
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.util.Vector;
 
 
 public class Spring extends Renderable implements ForceSource{

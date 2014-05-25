@@ -1,16 +1,9 @@
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -22,6 +15,10 @@ import javax.swing.JFrame;
  */
 public class PhysicsEmulator extends Canvas implements Runnable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/*
 	 * Konstanter som säger hur stort fönstret är, hur många zombie som
 	 * börjar på fältet, hur långt en kula max får färdas, och hur snabbt
@@ -36,13 +33,10 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 	// Ljud
 
 	// Våra bilder
-	private BufferedImage MassObjectImage;
 	private BufferedImage SpringImage;
-	private BufferedImage FixedPointImage;
 	private BufferedImage HoleImage;
 	private BufferedImage ballToHit;
 	private BufferedImage queBallImage;
-	private BufferedImage BallYellowImage;
 	private BufferedImage BGGreenImage;
 	private BufferedImage HWall;
 	private BufferedImage VWall;
@@ -91,18 +85,12 @@ public class PhysicsEmulator extends Canvas implements Runnable {
 		try {
 			HoleImage = ImageIO.read(getClass().getResource(
 					"/assets/holeupd.png"));
-			MassObjectImage = ImageIO.read(getClass().getResource(
-					"/assets/bullet.png"));
 			SpringImage = ImageIO.read(getClass().getResource(
 					"/assets/spring2.png"));
-			FixedPointImage = ImageIO.read(getClass().getResource(
-					"/assets/masslesspoint.png"));
 			ballToHit = ImageIO.read(getClass().getResource(
 					"/assets/baltoHit.png"));
 			queBallImage = ImageIO.read(getClass().getResource(
 					"/assets/cueBall.png"));
-			BallYellowImage = ImageIO.read(getClass().getResource(
-					"/assets/bally.png"));
 			BallBigImage = ImageIO.read(getClass().getResource(
 					"/assets/bigball.png"));
 			BGGreenImage = ImageIO.read(getClass().getResource(
